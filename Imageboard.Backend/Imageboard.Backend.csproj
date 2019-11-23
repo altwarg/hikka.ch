@@ -2,8 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <AssemblyName>Imageboard.Web</AssemblyName>
-    <RootNamespace>Imageboard.Web</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

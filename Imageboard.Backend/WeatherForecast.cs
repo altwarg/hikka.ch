@@ -1,6 +1,6 @@
 using System;
 
-namespace Imageboard.Web {
+namespace Imageboard.Backend {
     public class WeatherForecast {
         public DateTime Date { get; set; }
 
