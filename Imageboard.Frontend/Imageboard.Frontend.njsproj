@@ -35,6 +35,9 @@
     <Content Include="public\favicon.ico" />
     <Content Include="public\index.html" />
     <Content Include="src\App.vue" />
+    <Content Include="src\components\controls\BoardsLinksControl.vue">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\components\Home.vue" />
     <Content Include="tsconfig.json" />
     <Content Include="package.json" />
@@ -46,6 +49,7 @@
     <Folder Include="src\" />
     <Folder Include="src\assets\" />
     <Folder Include="src\components\" />
+    <Folder Include="src\components\controls\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\main.ts" />
@@ -54,6 +58,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="babel.config.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="src\common.ts" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
   <ProjectExtensions>
