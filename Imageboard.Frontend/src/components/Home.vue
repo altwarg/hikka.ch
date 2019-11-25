@@ -1,9 +1,6 @@
 <template>
-    <div class="home">
-        <span id="boards-links-control">
-            <BoardsLinksControl v-bind:boards="boards" />
-        </span>
-        <div id="content">
+    <div id="home">
+        <div id="description">
             <h1 class="text-center">{{ imageboard }}</h1>
             <h2 class="text-center">Welcome. Once again</h2>
 
@@ -15,6 +12,10 @@
                     <p>{{ imageboard }} is a simple image-based bulletin board where anyone can post comments and share images. There are boards dedicated to a variety of topics, from Japanese animation and culture to videogames, music and photography. Users to not need to register an account before participating in the commutiny. Fell free to click on a board below that interests you and jump right in!</p>
                 </div>
             </div>
+        </div>
+
+        <div id="content">
+            <hr />
 
             <div class="row">
                 <div class="col-md-12">
@@ -34,18 +35,11 @@
 
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
-    import BoardsLinksControl from './controls/BoardsLinksControl.vue'
     import { Constants } from '../common';
 
-    @Component({
-        components: {
-            BoardsLinksControl
-        },
-    })
+    @Component
     export default class Home extends Vue {
-        get boards(): Array<{ abbr: string, name: string }> {
-                return Constants.BoardsInfo;
-        }
+        @Prop() private boards!: Array<{ abbr: string, name: string }>;
 
         get imageboard(): string {
             return Constants.ImageboardName;

@@ -36,6 +36,9 @@
     <Content Include="public\favicon.ico" />
     <Content Include="public\index.html" />
     <Content Include="src\App.vue" />
+    <Content Include="src\components\Board.vue">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\components\controls\BoardsLinksControl.vue">
       <SubType>Code</SubType>
     </Content>
@@ -62,6 +65,9 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="src\common.ts" />
+    <TypeScriptCompile Include="src\router.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
   <ProjectExtensions>

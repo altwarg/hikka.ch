@@ -4,8 +4,18 @@
             [
         </strong>
         <strong v-for="abbr in boardsAbbr">
-            <a href="#" class="link-to-board" v-if="abbr !== '/'" >{{ abbr }}</a>
+            <router-link v-bind:to="abbr" class="link-to-board" v-if="abbr !== '/'">{{ abbr }}</router-link>
             <span v-else> {{ abbr }} </span>
+        </strong>
+        <strong>
+            ]
+        </strong>
+
+        <strong>
+            [
+        </strong>
+        <strong>
+            <router-link to="/" class="link-to-board">Home</router-link>
         </strong>
         <strong>
             ]

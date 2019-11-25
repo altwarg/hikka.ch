@@ -1,19 +1,27 @@
 <template>
     <div id="app">
-        <Home />
+        <span id="boards-links-control">
+            <BoardsLinksControl v-bind:boards="boards" />
+        </span>
+        <router-view />
     </div>
 </template>
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import Home from './components/Home.vue';
+    import BoardsLinksControl from './components/controls/BoardsLinksControl.vue'
+    import { Constants } from './common';
 
     @Component({
         components: {
-            Home
+            BoardsLinksControl
         }
     })
-    export default class App extends Vue { }
+    export default class App extends Vue {
+        get boards(): Array<{ abbr: string, name: string }> {
+            return Constants.BoardsInfo;
+        }
+    }
 </script>
 
 <style>
