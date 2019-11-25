@@ -19,9 +19,12 @@
     @Component
     export default class BoardsLinksControl extends Vue {
         @Prop() private boards!: Array<{ abbr: string, name: string }>;
-        @Prop() private boardsAbbr: Array<string> = this.Intersperce(this.boards.map(item => item.abbr), '/');
 
-        private Intersperce(arr: Array<string>, el: string): Array<string> {
+        get boardsAbbr(): Array<string> {
+            return this.intersperce(this.boards.map(item => item.abbr), '/');
+        }
+
+        public intersperce(arr: Array<string>, el: string): Array<string> {
             let res: Array<string> = [];
             let i: number = 0;
 
@@ -39,12 +42,20 @@
 </script>
 
 <style scoped>
-    .borderless {
-        border: none;
-    }
-
     .link-to-board {
         display: inline;
         text-decoration: none;
+        color: #337ab7;
+    }
+
+    a:hover, a:focus {
+        color: #23527c;
+        text-decoration: underline;
+    }
+
+    a:focus {
+        outline: thin dotted;
+        outline: 5px auto -webkit-focus-ring-color;
+        outline-offset: -2px;
     }
 </style>

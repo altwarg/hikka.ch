@@ -1,11 +1,33 @@
 <template>
     <div class="home">
         <span id="boards-links-control">
-            <BoardsLinksControl v-bind:boards="boardsInfo" />
+            <BoardsLinksControl v-bind:boards="boards" />
         </span>
         <div id="content">
-            <h1>{{ msg }}</h1>
-            <p>Welcome to your new single-page application, built with <a href="https://vuejs.org" target="_blank">Vue.js</a> and <a href="http://www.typescriptlang.org/" target="_blank">TypeScript</a>.</p>
+            <h1 class="text-center">{{ imageboard }}</h1>
+            <h2 class="text-center">Welcome. Once again</h2>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="text-center">What is {{ imageboard }}?</h3>
+                    <p>{{ imageboard }} is a simple image-based bulletin board where anyone can post comments and share images. There are boards dedicated to a variety of topics, from Japanese animation and culture to videogames, music and photography. Users to not need to register an account before participating in the commutiny. Fell free to click on a board below that interests you and jump right in!</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="text-center">Boards</h3>
+                    <ul class="list-group row">
+                        <li class="list-group-item col-xs-6 col-sm-3 col-md-4 borderless" v-for="board in boards">
+                            <strong>
+                                <a href="#">/{{ board.abbr }} - {{ board.name }}</a>
+                            </strong>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -18,15 +40,33 @@
     @Component({
         components: {
             BoardsLinksControl
-        }
+        },
     })
-
     export default class Home extends Vue {
-        @Prop() private msg!: string;
-        @Prop() private boardsInfo: Array<{ abbr: string, name: string }> = Constants.BoardsInfo;
+        get boards(): Array<{ abbr: string, name: string }> {
+                return Constants.BoardsInfo;
+        }
+
+        get imageboard(): string {
+            return Constants.ImageboardName;
+        }
     }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+    a {
+        text-decoration: none;
+        color: #337ab7;
+    }
+
+    a:hover, a:focus {
+        color: #23527c;
+        text-decoration: underline;
+    }
+
+    a:focus {
+        outline: thin dotted;
+        outline: 5px auto -webkit-focus-ring-color;
+        outline-offset: -2px;
+    }
 </style>
