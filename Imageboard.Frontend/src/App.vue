@@ -8,9 +8,9 @@
 </template>
 
 <script lang="ts">
-    import { Component, Vue } from 'vue-property-decorator';
+    import { Component, Vue } from 'vue-property-decorator'
     import BoardsLinksControl from './components/controls/BoardsLinksControl.vue'
-    import { Constants } from './common';
+    import { Constants } from './common'
 
     @Component({
         components: {

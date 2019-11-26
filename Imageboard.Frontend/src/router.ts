@@ -17,6 +17,7 @@ export const Routes: Array<any> = [
         component: () => import('./components/Board.vue'),
         props: {
             board: Constants.BoardsInfo[0].name,
+            thread: Constants.ThreadInfo,
         },
     },
     {
@@ -24,6 +25,7 @@ export const Routes: Array<any> = [
         component: () => import('./components/Board.vue'),
         props: {
             board: Constants.BoardsInfo[1].name,
+            thread: Constants.ThreadInfo,
         },
     },
     {
@@ -31,6 +33,7 @@ export const Routes: Array<any> = [
         component: () => import('./components/Board.vue'),
         props: {
             board: Constants.BoardsInfo[2].name,
+            thread: Constants.ThreadInfo,
         },
     },
     {
@@ -38,6 +41,7 @@ export const Routes: Array<any> = [
         component: () => import('./components/Board.vue'),
         props: {
             board: Constants.BoardsInfo[3].name,
+            thread: Constants.ThreadInfo,
         },
     },
     {
@@ -45,6 +49,7 @@ export const Routes: Array<any> = [
         component: () => import('./components/Board.vue'),
         props: {
             board: Constants.BoardsInfo[4].name,
+            thread: Constants.ThreadInfo,
         },
     },
     {
@@ -52,6 +57,7 @@ export const Routes: Array<any> = [
         component: () => import('./components/Board.vue'),
         props: {
             board: Constants.BoardsInfo[5].name,
+            thread: Constants.ThreadInfo,
         },
     },
     {
@@ -59,6 +65,7 @@ export const Routes: Array<any> = [
         component: () => import('./components/Board.vue'),
         props: {
             board: Constants.BoardsInfo[6].name,
+            thread: Constants.ThreadInfo,
         },
     },
     {
@@ -66,6 +73,7 @@ export const Routes: Array<any> = [
         component: () => import('./components/Board.vue'),
         props: {
             board: Constants.BoardsInfo[7].name,
+            thread: Constants.ThreadInfo,
         },
     },
     {
@@ -73,6 +81,7 @@ export const Routes: Array<any> = [
         component: () => import('./components/Board.vue'),
         props: {
             board: Constants.BoardsInfo[8].name,
+            thread: Constants.ThreadInfo,
         },
     },
 ];

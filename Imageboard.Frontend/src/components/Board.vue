@@ -5,17 +5,23 @@
         </div>
 
         <div id="content">
-            Here must be some content
+            <Thread v-bind:threadInfo="thread" />
         </div>
     </div>
 </template>
 
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator'
+    import Thread from './Thread.vue'
 
-    @Component
+    @Component({
+        components: {
+            Thread
+        }
+    })
     export default class Board extends Vue {
-        @Prop() private board!: object;
+        @Prop() private board!: string;
+        @Prop() private thread!: Array<object>;
     }
 </script>
 

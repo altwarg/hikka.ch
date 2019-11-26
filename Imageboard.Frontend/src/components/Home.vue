@@ -21,9 +21,9 @@
                 <div class="col-md-12">
                     <h3 class="text-center">Boards</h3>
                     <ul class="list-group row">
-                        <li class="list-group-item col-xs-6 col-sm-3 col-md-4 borderless" v-for="board in boards">
+                        <li class="list-group-item col-xs-6 col-sm-3 col-md-4 borderless" v-for="(board, index) in boards" v-bind:key="index">
                             <strong>
-                                <a href="#">/{{ board.abbr }} - {{ board.name }}</a>
+                                <router-link v-bind:to="board.abbr">/{{ board.abbr }} - {{ board.name }}</router-link>
                             </strong>
                         </li>
                     </ul>
@@ -34,8 +34,8 @@
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
-    import { Constants } from '../common';
+    import { Component, Prop, Vue } from 'vue-property-decorator'
+    import { Constants } from '../common'
 
     @Component
     export default class Home extends Vue {

@@ -3,7 +3,7 @@
         <strong>
             [
         </strong>
-        <strong v-for="abbr in boardsAbbr">
+        <strong v-for="(abbr, index) in boardsAbbr" v-bind:key="index">
             <router-link v-bind:to="abbr" class="link-to-board" v-if="abbr !== '/'">{{ abbr }}</router-link>
             <span v-else> {{ abbr }} </span>
         </strong>
@@ -24,11 +24,11 @@
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { Component, Prop, Vue } from 'vue-property-decorator'
 
     @Component
     export default class BoardsLinksControl extends Vue {
-        @Prop() private boards!: Array<{ abbr: string, name: string }>;
+        @Prop() private boards!: Array<{ abbr: string, name: string, no: number }>;
 
         get boardsAbbr(): Array<string> {
             return this.intersperce(this.boards.map(item => item.abbr), '/');

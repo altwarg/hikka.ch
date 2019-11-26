@@ -42,6 +42,12 @@
     <Content Include="src\components\controls\BoardsLinksControl.vue">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="src\components\controls\PostItemControl.vue">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\components\Thread.vue">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\components\Home.vue" />
     <Content Include="tsconfig.json" />
     <Content Include="package.json" />
