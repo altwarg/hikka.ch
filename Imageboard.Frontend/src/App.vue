@@ -36,15 +36,15 @@
     }
 </script>
 
-<style>
+<style lang="scss">
     body {
         padding-top: 10px;
         padding-bottom: 10px;
         font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
         font-size: 14px;
-        line-height: 1.42857143;
+        line-height: 1.4;
         color: #333;
-        background-color: #fff;
+        background-color: #eee;
     }
 
     h1, h2, h3, h4, h5, h6 {
@@ -85,27 +85,27 @@
         padding: 10px 15px;
         margin-bottom: -1px;
         background-color: #fff;
-    }
 
-    .list-group-item:first-child {
-        border-top-left-radius: 4px;
-        border-top-right-radius: 4px;
-    }
+        :first-child {
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+        }
 
-    .list-group-item:last-child {
-        margin-bottom: 0;
-        border-bottom-right-radius: 4px;
-        border-bottom-left-radius: 4px;
+        :last-child {
+            margin-bottom: 0;
+            border-bottom-right-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
     }
 
     a.list-group-item {
         color: #555;
-    }
 
-    a.list-group-item:hover, a.list-group-item:focus {
-        color: #555;
-        text-decoration: none;
-        background-color: #f5f5f5;
+        :hover, :focus {
+            color: #555;
+            text-decoration: none;
+            background-color: #f5f5f5;
+        }
     }
 
     #app {

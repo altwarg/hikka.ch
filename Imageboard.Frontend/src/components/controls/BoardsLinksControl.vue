@@ -4,7 +4,7 @@
             [
         </strong>
         <strong v-for="(abbr, index) in boardsAbbr" :key="index">
-            <router-link :to="abbr" class="link-to-board" v-if="abbr !== '/'">{{ abbr }}</router-link>
+            <router-link :to="abbr" class="board-navigation__link" v-if="abbr !== '/'">{{ abbr }}</router-link>
             <span v-else> {{ abbr }} </span>
         </strong>
         <strong>
@@ -15,7 +15,7 @@
             [
         </strong>
         <strong>
-            <router-link to="/" class="link-to-board">Home</router-link>
+            <router-link to="/" class="board-navigation__link">Home</router-link>
         </strong>
         <strong>
             ]
@@ -52,7 +52,7 @@
 </script>
 
 <style scoped>
-    .link-to-board {
+    .board-navigation__link {
         display: inline;
         text-decoration: none;
         color: #337ab7;

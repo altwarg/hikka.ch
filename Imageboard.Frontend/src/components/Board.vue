@@ -3,6 +3,8 @@
         <div id="content">
             <Thread :threadInfo="thread" />
         </div>
+
+        <hr />
     </div>
 </template>
 

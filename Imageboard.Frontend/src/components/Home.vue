@@ -6,8 +6,8 @@
             <div class="row">
                 <div class="full-width">
                     <h3 class="text-center">Boards</h3>
-                    <ul id="homepage-boards-list" class="list-group">
-                        <li class="list-group-item homepage-board borderless" v-for="(board, index) in boards" :key="index">
+                    <ul id="homepage__boards-list" class="list-group">
+                        <li class="list-group-item homepage__board borderless" v-for="(board, index) in boards" :key="index">
                             <strong>
                                 <router-link :to="board.abbr">/{{ board.abbr }} - {{ board.name }}</router-link>
                             </strong>
@@ -38,28 +38,28 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
     a {
         text-decoration: none;
         color: #337ab7;
+
+        :hover, :focus {
+            color: #23527c;
+            text-decoration: underline;
+        }
+
+        :focus {
+            outline: thin dotted;
+            outline: 5px auto -webkit-focus-ring-color;
+            outline-offset: -2px;
+        }
     }
 
-    a:hover, a:focus {
-        color: #23527c;
-        text-decoration: underline;
-    }
-
-    a:focus {
-        outline: thin dotted;
-        outline: 5px auto -webkit-focus-ring-color;
-        outline-offset: -2px;
-    }
-
-    #homepage-boards-list {
+    #homepage__boards-list {
         text-align: center;
     }
 
-    .homepage-board {
+    .homepage__board {
         position: relative;
         min-height: 1px;
         padding-right: 20px;
