@@ -1,5 +1,5 @@
 <template>
-    <div v-bind:class="{ 'post-op': no === 1, 'post-reply': no !== 1 }" class="post-container">
+    <div :class="{ 'post-op': no === 1, 'post-reply': no !== 1 }" class="post-container">
         <div class="post-details">
             <span class="post-anon">Anonymous</span>
             <span class="post-is-op" v-if="isOP">#OP</span>

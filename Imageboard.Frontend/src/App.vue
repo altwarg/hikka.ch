@@ -1,25 +1,37 @@
 <template>
     <div id="app">
-        <span id="boards-links-control">
-            <BoardsLinksControl v-bind:boards="boards" />
+        <span class="boards-links-control">
+            <BoardsLinksControl :boards="boards" />
         </span>
+        <div id="description">
+            <BoardsDescriptionControl :name="this.$route.name" />
+        </div>
         <router-view />
+        <span class="boards-links-control">
+            <BoardsLinksControl :boards="boards" v-if="!onHomePage" />
+        </span>
     </div>
 </template>
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator'
     import BoardsLinksControl from './components/controls/BoardsLinksControl.vue'
+    import BoardsDescriptionControl from './components/controls/BoardsDescriptionControl.vue'
     import { Constants } from './common'
 
     @Component({
         components: {
-            BoardsLinksControl
+            BoardsLinksControl,
+            BoardsDescriptionControl
         }
     })
     export default class App extends Vue {
         get boards(): Array<{ abbr: string, name: string }> {
             return Constants.BoardsInfo;
+        }
+
+        get onHomePage(): boolean {
+            return this.$route.name == Constants.ImageboardName;
         }
     }
 </script>
@@ -56,23 +68,6 @@
 
     .text-center {
         text-align: center;
-    }
-
-    .row {
-        margin-right: -15px;
-        margin-left: -15px;
-    }
-
-    .col-md-12, .col-md-4, .col-xs-6, .col-sm-3 {
-        position: relative;
-        min-height: 1px;
-        padding-right: 15px;
-        padding-left: 15px;
-    }
-
-    .col-xs-6 {
-        float: left;
-        width: 50%;
     }
 
     .borderless {
@@ -113,24 +108,15 @@
         background-color: #f5f5f5;
     }
 
-    @media (min-width: 992px) {
-        .col-md-12, .col-md-4 {
-            float: left;
-        }
-
-        .col-md-12 {
-            width: 100%;
-        }
-
-        .col-md-4 {
-            width: 33.33333333%;
-        }
+    #app {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-areas: "." "." ".";
+        grid-auto-rows: minmax(min-content, max-content);
     }
 
-    @media (min-width: 768px) {
-        .col-sm-3 {
-            float: left;
-            width: 25%;
-        }
+    .row {
+        margin-right: -15px;
+        margin-left: -15px;
     }
 </style>

@@ -1,29 +1,15 @@
 <template>
     <div id="home">
-        <div id="description">
-            <h1 class="text-center">{{ imageboard }}</h1>
-            <h2 class="text-center">Welcome. Once again</h2>
-
-            <hr />
-
-            <div class="row">
-                <div class="col-md-12">
-                    <h3 class="text-center">What is {{ imageboard }}?</h3>
-                    <p>{{ imageboard }} is a simple image-based bulletin board where anyone can post comments and share images. There are boards dedicated to a variety of topics, from Japanese animation and culture to videogames, music and photography. Users to not need to register an account before participating in the commutiny. Fell free to click on a board below that interests you and jump right in!</p>
-                </div>
-            </div>
-        </div>
-
         <div id="content">
             <hr />
 
             <div class="row">
-                <div class="col-md-12">
+                <div class="full-width">
                     <h3 class="text-center">Boards</h3>
-                    <ul class="list-group row">
-                        <li class="list-group-item col-xs-6 col-sm-3 col-md-4 borderless" v-for="(board, index) in boards" v-bind:key="index">
+                    <ul id="homepage-boards-list" class="list-group">
+                        <li class="list-group-item homepage-board borderless" v-for="(board, index) in boards" :key="index">
                             <strong>
-                                <router-link v-bind:to="board.abbr">/{{ board.abbr }} - {{ board.name }}</router-link>
+                                <router-link :to="board.abbr">/{{ board.abbr }} - {{ board.name }}</router-link>
                             </strong>
                         </li>
                     </ul>
@@ -36,8 +22,13 @@
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator'
     import { Constants } from '../common'
+    import BoardsDescriptionControl from './controls/BoardsDescriptionControl.vue'
 
-    @Component
+    @Component({
+        components: {
+            BoardsDescriptionControl
+        }
+    })
     export default class Home extends Vue {
         @Prop() private boards!: Array<{ abbr: string, name: string }>;
 
@@ -62,5 +53,18 @@
         outline: thin dotted;
         outline: 5px auto -webkit-focus-ring-color;
         outline-offset: -2px;
+    }
+
+    #homepage-boards-list {
+        text-align: center;
+    }
+
+    .homepage-board {
+        position: relative;
+        min-height: 1px;
+        padding-right: 20px;
+        padding-left: 20px;
+        width: 15%;
+        float: left;
     }
 </style>

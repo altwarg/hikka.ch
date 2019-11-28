@@ -6,6 +6,7 @@ Vue.use(Router);
 
 export const Routes: Array<any> = [
     {
+        name: Constants.ImageboardName,
         path: '/',
         component: () => import('./components/Home.vue'),
         props: {
@@ -13,6 +14,7 @@ export const Routes: Array<any> = [
         },
     },
     {
+        name: 'Anime',
         path: '/a',
         component: () => import('./components/Board.vue'),
         props: {
@@ -21,6 +23,7 @@ export const Routes: Array<any> = [
         },
     },
     {
+        name: 'Random',
         path: '/b',
         component: () => import('./components/Board.vue'),
         props: {
@@ -29,6 +32,7 @@ export const Routes: Array<any> = [
         },
     },
     {
+        name: 'Discussions',
         path: '/d',
         component: () => import('./components/Board.vue'),
         props: {
@@ -37,6 +41,7 @@ export const Routes: Array<any> = [
         },
     },
     {
+        name: 'International',
         path: '/int',
         component: () => import('./components/Board.vue'),
         props: {
@@ -45,6 +50,7 @@ export const Routes: Array<any> = [
         },
     },
     {
+        name: 'Programming',
         path: '/pr',
         component: () => import('./components/Board.vue'),
         props: {
@@ -53,6 +59,7 @@ export const Routes: Array<any> = [
         },
     },
     {
+        name: 'Software',
         path: '/s',
         component: () => import('./components/Board.vue'),
         props: {
@@ -61,6 +68,7 @@ export const Routes: Array<any> = [
         },
     },
     {
+        name: 'Politics',
         path: '/po',
         component: () => import('./components/Board.vue'),
         props: {
@@ -69,6 +77,7 @@ export const Routes: Array<any> = [
         },
     },
     {
+        name: 'Video games',
         path: '/vg',
         component: () => import('./components/Board.vue'),
         props: {
@@ -77,6 +86,7 @@ export const Routes: Array<any> = [
         },
     },
     {
+        name: 'Conspiration theories',
         path: '/zog',
         component: () => import('./components/Board.vue'),
         props: {

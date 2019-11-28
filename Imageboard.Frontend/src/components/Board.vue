@@ -1,11 +1,7 @@
 <template>
     <div id="board">
-        <div id="description">
-            <h1 class="text-center">{{ board }}</h1>
-        </div>
-
         <div id="content">
-            <Thread v-bind:threadInfo="thread" />
+            <Thread :threadInfo="thread" />
         </div>
     </div>
 </template>
@@ -13,10 +9,12 @@
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator'
     import Thread from './Thread.vue'
+    import BoardsDescriptionControl from './controls/BoardsDescriptionControl.vue'
 
     @Component({
         components: {
-            Thread
+            Thread,
+            BoardsDescriptionControl
         }
     })
     export default class Board extends Vue {

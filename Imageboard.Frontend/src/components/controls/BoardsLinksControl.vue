@@ -3,8 +3,8 @@
         <strong>
             [
         </strong>
-        <strong v-for="(abbr, index) in boardsAbbr" v-bind:key="index">
-            <router-link v-bind:to="abbr" class="link-to-board" v-if="abbr !== '/'">{{ abbr }}</router-link>
+        <strong v-for="(abbr, index) in boardsAbbr" :key="index">
+            <router-link :to="abbr" class="link-to-board" v-if="abbr !== '/'">{{ abbr }}</router-link>
             <span v-else> {{ abbr }} </span>
         </strong>
         <strong>

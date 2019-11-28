@@ -1,7 +1,7 @@
 <template>
     <div class="thread">
-        <div v-bind:class="{ 'thread-oppost': post.no === 1, 'thread-post': post.no !== 1 }" v-for="post in threadInfo" v-bind:key="post.no">
-            <PostItemControl v-bind:id="post.id" v-bind:datetime="post.datetime" v-bind:isOP="post.isOP" v-bind:message="post.message" v-bind:no="post.no" />
+        <div :class="{ 'thread-oppost': post.no === 1, 'thread-post': post.no !== 1 }" v-for="post in threadInfo" :key="post.no">
+            <PostItemControl :id="post.id" :datetime="post.datetime" :isOP="post.isOP" :message="post.message" :no="post.no" />
         </div>
     </div>
 </template>
