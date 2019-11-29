@@ -20,20 +20,35 @@
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator'
+    import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
     import { Constants } from '../common'
     import BoardsDescriptionControl from './controls/BoardsDescriptionControl.vue'
+    import { RequestMiddleware } from '../Middleware/RequestMiddleware';
 
     @Component({
         components: {
             BoardsDescriptionControl
-        }
+        },
     })
     export default class Home extends Vue {
-        @Prop() private boards!: Array<{ abbr: string, name: string }>;
+        private boardsInfo!: Array<{ abbr: string, name: string }>;
 
         get imageboard(): string {
             return Constants.ImageboardName;
+        }
+
+        get boards(): Array<{ abbr: string, name: string }> {
+            return this.boardsInfo;
+        }
+
+        async beforeMount() {
+            await this.requestBoardsInfo();
+        }
+
+        private requestBoardsInfo(): void {
+            RequestMiddleware.getBoardsInfo().then((data) => {
+                this.boardsInfo = data;
+            })
         }
     }
 </script>
@@ -57,6 +72,10 @@
 
     #homepage__boards-list {
         text-align: center;
+
+        li {
+            background-color: #eee;
+        }
     }
 
     .homepage__board {

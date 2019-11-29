@@ -12,6 +12,7 @@ export class Constants {
     ];
 
     public static ImageboardName: string = 'Imageboard';
+    public static BackendURL: string = 'https://localhost:51621/api';
 
     public static ThreadInfo: Array<{ id: string, datetime: string, isOP: boolean, message: string, no: number }> = [
         {

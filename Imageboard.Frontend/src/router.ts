@@ -9,9 +9,6 @@ export const Routes: Array<any> = [
         name: Constants.ImageboardName,
         path: '/',
         component: () => import('./components/Home.vue'),
-        props: {
-            boards: Constants.BoardsInfo,
-        },
     },
     {
         name: 'Anime',
