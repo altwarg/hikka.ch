@@ -1,37 +1,39 @@
 <template>
     <div id="app">
         <span class="boards-links-control">
-            <BoardsLinksControl :boards="boards" />
+            <BoardsLinksControl :boards="boards.data" />
         </span>
         <div id="description">
             <BoardsDescriptionControl :name="this.$route.name" />
         </div>
         <router-view />
         <span class="boards-links-control">
-            <BoardsLinksControl :boards="boards" v-if="!onHomePage" />
+            <BoardsLinksControl :boards="boards.data" v-if="!onHomePage" />
         </span>
     </div>
 </template>
 
 <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator'
+    import { mapGetters } from 'vuex'
+    import { Constants } from './common'
     import BoardsLinksControl from './components/controls/BoardsLinksControl.vue'
     import BoardsDescriptionControl from './components/controls/BoardsDescriptionControl.vue'
-    import { Constants } from './common'
 
     @Component({
         components: {
             BoardsLinksControl,
             BoardsDescriptionControl
-        }
+        },
+        computed: mapGetters(['boards'])
     })
     export default class App extends Vue {
-        get boards(): Array<{ abbr: string, name: string }> {
-            return Constants.BoardsInfo;
-        }
-
         get onHomePage(): boolean {
             return this.$route.name == Constants.ImageboardName;
+        }
+
+        beforeMount() {
+            this.$store.dispatch('fetchDataFromBackend');
         }
     }
 </script>

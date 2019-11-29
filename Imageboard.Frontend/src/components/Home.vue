@@ -7,7 +7,7 @@
                 <div class="full-width">
                     <h3 class="text-center">Boards</h3>
                     <ul id="homepage__boards-list" class="list-group">
-                        <li class="list-group-item homepage__board borderless" v-for="(board, index) in boards" :key="index">
+                        <li class="list-group-item homepage__board borderless" v-for="(board, index) in boards.data" :key="index">
                             <strong>
                                 <router-link :to="board.abbr">/{{ board.abbr }} - {{ board.name }}</router-link>
                             </strong>
@@ -20,35 +20,24 @@
 </template>
 
 <script lang="ts">
-    import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
+    import { Component, Vue } from 'vue-property-decorator'
+    import { mapGetters } from 'vuex';
     import { Constants } from '../common'
     import BoardsDescriptionControl from './controls/BoardsDescriptionControl.vue'
-    import { RequestMiddleware } from '../Middleware/RequestMiddleware';
 
     @Component({
         components: {
             BoardsDescriptionControl
         },
+        computed: mapGetters(['boards'])
     })
     export default class Home extends Vue {
-        private boardsInfo!: Array<{ abbr: string, name: string }>;
-
         get imageboard(): string {
             return Constants.ImageboardName;
         }
 
-        get boards(): Array<{ abbr: string, name: string }> {
-            return this.boardsInfo;
-        }
-
-        async beforeMount() {
-            await this.requestBoardsInfo();
-        }
-
-        private requestBoardsInfo(): void {
-            RequestMiddleware.getBoardsInfo().then((data) => {
-                this.boardsInfo = data;
-            })
+        beforeMount() {
+            this.$store.dispatch('fetchDataFromBackend');
         }
     }
 </script>

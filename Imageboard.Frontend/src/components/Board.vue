@@ -21,7 +21,7 @@
     })
     export default class Board extends Vue {
         @Prop() private board!: string;
-        @Prop() private thread!: Array<object>;
+        @Prop() private thread!: object[];
     }
 </script>
 

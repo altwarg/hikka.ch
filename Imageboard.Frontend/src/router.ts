@@ -4,7 +4,7 @@ import { Constants } from './common';
 
 Vue.use(Router);
 
-export const Routes: Array<any> = [
+export const Routes: any[] = [
     {
         name: Constants.ImageboardName,
         path: '/',
@@ -15,7 +15,7 @@ export const Routes: Array<any> = [
         path: '/a',
         component: () => import('./components/Board.vue'),
         props: {
-            board: Constants.BoardsInfo[0].name,
+            board: 'Anime',
             thread: Constants.ThreadInfo,
         },
     },
@@ -24,7 +24,7 @@ export const Routes: Array<any> = [
         path: '/b',
         component: () => import('./components/Board.vue'),
         props: {
-            board: Constants.BoardsInfo[1].name,
+            board: 'Random',
             thread: Constants.ThreadInfo,
         },
     },
@@ -33,7 +33,7 @@ export const Routes: Array<any> = [
         path: '/d',
         component: () => import('./components/Board.vue'),
         props: {
-            board: Constants.BoardsInfo[2].name,
+            board: 'Discussions',
             thread: Constants.ThreadInfo,
         },
     },
@@ -42,7 +42,7 @@ export const Routes: Array<any> = [
         path: '/int',
         component: () => import('./components/Board.vue'),
         props: {
-            board: Constants.BoardsInfo[3].name,
+            board: 'International',
             thread: Constants.ThreadInfo,
         },
     },
@@ -51,7 +51,7 @@ export const Routes: Array<any> = [
         path: '/pr',
         component: () => import('./components/Board.vue'),
         props: {
-            board: Constants.BoardsInfo[4].name,
+            board: 'Programming',
             thread: Constants.ThreadInfo,
         },
     },
@@ -60,7 +60,7 @@ export const Routes: Array<any> = [
         path: '/s',
         component: () => import('./components/Board.vue'),
         props: {
-            board: Constants.BoardsInfo[5].name,
+            board: 'Software',
             thread: Constants.ThreadInfo,
         },
     },
@@ -69,7 +69,7 @@ export const Routes: Array<any> = [
         path: '/po',
         component: () => import('./components/Board.vue'),
         props: {
-            board: Constants.BoardsInfo[6].name,
+            board: 'Politics',
             thread: Constants.ThreadInfo,
         },
     },
@@ -78,7 +78,7 @@ export const Routes: Array<any> = [
         path: '/vg',
         component: () => import('./components/Board.vue'),
         props: {
-            board: Constants.BoardsInfo[7].name,
+            board: 'Video games',
             thread: Constants.ThreadInfo,
         },
     },
@@ -87,7 +87,7 @@ export const Routes: Array<any> = [
         path: '/zog',
         component: () => import('./components/Board.vue'),
         props: {
-            board: Constants.BoardsInfo[8].name,
+            board: 'Conspiration theories',
             thread: Constants.ThreadInfo,
         },
     },

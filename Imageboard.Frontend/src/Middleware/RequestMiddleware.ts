@@ -9,8 +9,13 @@ const http = axios.create({
 })
 
 export class RequestMiddleware {
-    public static async getBoardsInfo(): Promise<Array<{ abbr: string, name: string }>> {
-        const response = await http.get('/boards');
-        return response.data;
+    public static async getBoardsInfo() {
+        // await RequestMiddleware.timeout(5000);
+
+        return await http.get('/boards');
     }
+
+    // public static timeout(ms: number) {
+    //     return new Promise(resolve => setTimeout(resolve, ms))
+    // }
 }

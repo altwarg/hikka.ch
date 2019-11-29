@@ -1,6 +1,6 @@
 <template>
     <div class="thread">
-        <div :class="{ 'thread-oppost': post.no === 1, 'thread-post': post.no !== 1 }" v-for="post in threadInfo" :key="post.no">
+        <div :class="{ 'thread-oppost': post.no == 1, 'thread-post': post.no != 1 }" v-for="post in threadInfo" :key="post.no">
             <PostItemControl :id="post.id" :datetime="post.datetime" :isOP="post.isOP" :message="post.message" :no="post.no" />
         </div>
     </div>

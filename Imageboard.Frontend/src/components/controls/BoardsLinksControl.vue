@@ -28,7 +28,10 @@
 
     @Component
     export default class BoardsLinksControl extends Vue {
-        @Prop() private boards!: Array<{ abbr: string, name: string, no: number }>;
+        @Prop({ default: () => {
+            return new Array<{ abbr: string, name: string }>();
+        }})
+        private boards!: { abbr: string, name: string }[];
 
         get boardsAbbr(): Array<string> {
             return this.intersperce(this.boards.map(item => item.abbr), '/');
