@@ -16,7 +16,6 @@ export const Routes: any[] = [
         component: () => import('./components/Board.vue'),
         props: {
             board: 'Anime',
-            thread: Constants.ThreadInfo,
         },
     },
     {
@@ -25,7 +24,6 @@ export const Routes: any[] = [
         component: () => import('./components/Board.vue'),
         props: {
             board: 'Random',
-            thread: Constants.ThreadInfo,
         },
     },
     {
@@ -34,7 +32,6 @@ export const Routes: any[] = [
         component: () => import('./components/Board.vue'),
         props: {
             board: 'Discussions',
-            thread: Constants.ThreadInfo,
         },
     },
     {
@@ -43,7 +40,6 @@ export const Routes: any[] = [
         component: () => import('./components/Board.vue'),
         props: {
             board: 'International',
-            thread: Constants.ThreadInfo,
         },
     },
     {
@@ -52,7 +48,6 @@ export const Routes: any[] = [
         component: () => import('./components/Board.vue'),
         props: {
             board: 'Programming',
-            thread: Constants.ThreadInfo,
         },
     },
     {
@@ -61,7 +56,6 @@ export const Routes: any[] = [
         component: () => import('./components/Board.vue'),
         props: {
             board: 'Software',
-            thread: Constants.ThreadInfo,
         },
     },
     {
@@ -70,7 +64,6 @@ export const Routes: any[] = [
         component: () => import('./components/Board.vue'),
         props: {
             board: 'Politics',
-            thread: Constants.ThreadInfo,
         },
     },
     {
@@ -79,7 +72,6 @@ export const Routes: any[] = [
         component: () => import('./components/Board.vue'),
         props: {
             board: 'Video games',
-            thread: Constants.ThreadInfo,
         },
     },
     {
@@ -88,7 +80,6 @@ export const Routes: any[] = [
         component: () => import('./components/Board.vue'),
         props: {
             board: 'Conspiration theories',
-            thread: Constants.ThreadInfo,
         },
     },
 ];

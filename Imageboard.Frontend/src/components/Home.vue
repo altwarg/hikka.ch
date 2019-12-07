@@ -37,7 +37,7 @@
         }
 
         beforeMount() {
-            this.$store.dispatch('fetchDataFromBackend');
+            this.$store.dispatch('getBoardsInfo');
         }
     }
 </script>
