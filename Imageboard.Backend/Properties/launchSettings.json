@@ -1,0 +1,9 @@
+﻿{
+    "profiles": {
+        "Imageboard.Backend": {
+            "commandName": "Project",
+            "launchBrowser": true,
+            "applicationUrl": "https://localhost:51621"
+        }
+    }
+}

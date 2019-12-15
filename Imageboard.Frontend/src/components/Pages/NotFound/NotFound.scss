@@ -1,0 +1,25 @@
+#logo {
+    margin-bottom: 30px;
+}
+
+.box__data {
+    text-align: center;
+    padding: 10px;
+    overflow: auto;
+
+    img {
+        border: 1px solid #002244;
+        border-radius: 5px 5px 5px 5px;
+    }
+}
+
+.box__info {
+    border: none;
+    text-align: center;
+    padding: 10px;
+    font-size: 1.4em;
+
+    .not-found {
+        font-size: 3em;
+    }
+}
