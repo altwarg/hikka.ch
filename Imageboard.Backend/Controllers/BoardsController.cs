@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Imageboard.Backend.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,18 +13,25 @@ namespace Imageboard.Backend.Controllers {
         [HttpGet("getBoards")]
         [ProducesResponseType(200)]
         public IActionResult GetAllBoards() {
-            return this.Ok(new object[] {
-                new { abbr = "a", name = "Anime" },
-                new { abbr = "b", name = "Random" },
-                new { abbr = "d", name = "Discussions" },
-                new { abbr = "int", name = "International" },
-                new { abbr = "fl", name = "Foreign languages" },
-                new { abbr = "pr", name = "Programming" },
-                new { abbr = "s", name = "Software" },
-                new { abbr = "po", name = "Politics" },
-                new { abbr = "vg", name = "Video games" },
-                new { abbr = "zog", name = "Conspiration theories" },
-            });
+            using (var context = new ImageboardContext()) {
+                return Ok(context.Boards
+                    .Select(b => new { abbr = b.Abbr, name = b.Name })
+                    .OrderBy(b => b.abbr)
+                    .ToList()
+                );
+            }
+            // return this.Ok(new object[] {
+            //     new { abbr = "a", name = "Anime" },
+            //     new { abbr = "b", name = "Random" },
+            //     new { abbr = "d", name = "Discussions" },
+            //     new { abbr = "int", name = "International" },
+            //     new { abbr = "fl", name = "Foreign languages" },
+            //     new { abbr = "pr", name = "Programming" },
+            //     new { abbr = "s", name = "Software" },
+            //     new { abbr = "po", name = "Politics" },
+            //     new { abbr = "vg", name = "Video games" },
+            //     new { abbr = "zog", name = "Conspiration theories" },
+            // });
         }
 
         [HttpGet("threadInfo")]
