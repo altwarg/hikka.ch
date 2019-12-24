@@ -7,7 +7,6 @@ import './BoardsLinksControl.scss';
 
 type Props = {
     boardsInfo: BoardsInfo[];
-    name: string;
 }
 
 export default class BoardsLinksControl extends React.Component<Props> {

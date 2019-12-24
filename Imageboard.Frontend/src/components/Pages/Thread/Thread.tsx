@@ -14,19 +14,11 @@ export default class Thread extends React.Component<Props> {
         return (
             <div className="thread">
                 {this.props.threadInfo.map((item, key) => {
-                    if (item.no === 1) {
-                        return (
-                            <div className="thread__oppost" key={key}>
-                                <PostItemControl info={item} />
-                            </div>
-                        );
-                    } else {
-                        return (
-                            <div className="thread__post" key={key}>
-                                <PostItemControl info={item} />
-                            </div>
-                        );
-                    }
+                    return (
+                        <div className={item.no === 1 ? "thread__oppost" : "thread__post"} key={key}>
+                            <PostItemControl info={item} />
+                        </div>
+                    );
                 })}
             </div>
         );

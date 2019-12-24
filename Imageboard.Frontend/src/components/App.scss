@@ -80,6 +80,95 @@ a.list-group-item {
     margin-left: -15px;
 }
 
+input {
+    line-height: normal;
+}
+
+button, input, select, textarea {
+    font: inherit;
+    margin: 0;
+}
+
+textarea {
+    resize: none;
+}
+
 .hidden {
     visibility: hidden;
+}
+
+.input, .button, .button-mobile {
+    border: 1px solid #e0e0e0;
+    background-color: #f5f5f5;
+    color: #333;
+    transition: background-color 0.2s ease;
+}
+
+.input {
+    margin: 0;
+    padding: 2px 4px;
+    cursor: text;
+
+    &:focus {
+        outline: none;
+        border: 1px solid #a9a9a6;
+    }
+
+    &:hover {
+        border-color: #a9a9a6;
+    }
+}
+
+.button {
+    padding: 2px 6px;
+    cursor: pointer;
+
+    &:focus {
+        outline: none;
+        border: 1px solid #a9a9a6;
+    }
+
+    &:hover {
+        background-color: #dddddd;
+    }
+}
+
+.mobile {
+    display: none;
+}
+
+.hidden {
+    display: hidden;
+}
+
+.visible {
+    display: block;
+}
+
+@media only screen and (max-width: 480px) {
+    .desktop {
+        display: none !important;
+    }
+
+    .mobile {
+        display: initial !important;
+        clear: both !important;
+    }
+
+    .button-mobile {
+        border-radius: 3px;
+        padding: 6px 10px 5px 10px !important;
+        font-weight: bold;
+        display: inline-block !important;
+        cursor: pointer;
+
+        &:focus {
+            outline: none;
+            border: 1px solid #a9a9a6;
+        }
+
+        &:hover {
+            background-color: #dddddd;
+        }
+    }
 }

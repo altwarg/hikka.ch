@@ -12,9 +12,11 @@ export default class NotFound extends React.Component {
         return Math.round(Math.random() * (max - min)) + min;
     }
 
-    render() {
+    componentDidMount() {
         document.title = "Not found";
+    }
 
+    render() {
         return (
             <div id="content">
                 <div id="logo">

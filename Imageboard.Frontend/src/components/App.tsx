@@ -24,10 +24,8 @@ export default class App extends React.Component<{}, State> {
 
         let result: BoardsInfo = this.boardsInfo.filter(info => info.abbr === document.location.pathname.substr(1))[0];
 
-        if (document.location.pathname === '/') {
+        if (document.location.pathname === '/' && !result) {
             return Constants.ImageboardName;
-        } else if (!result) {
-            return '404';
         }
 
         return result.name;
@@ -58,7 +56,7 @@ export default class App extends React.Component<{}, State> {
                             <Route path="/" exact render={() => <Home boardsInfo={this.boardsInfo} />} />
 
                             {this.boardsInfo.map((item, key) => {
-                                return <Route path={'/' + item.abbr} exact  render={() => <Board name={this.currentPageName} boardsInfo={this.boardsInfo} /> } key={key} />
+                                return <Route path={'/' + item.abbr} exact render={() => <Board name={this.currentPageName} boardsInfo={this.boardsInfo} /> } key={key} />
                             })}
 
                             <Route path="*" component={NotFound} />
