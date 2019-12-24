@@ -29,7 +29,10 @@ namespace Imageboard.Backend {
             app.UseRouting();
 
             app.UseCors(options => {
-                options.WithOrigins("http://localhost:8080").AllowAnyOrigin();
+                options.WithOrigins("http://localhost:8080")
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
             });
 
             app.UseEndpoints(endpoints => {
