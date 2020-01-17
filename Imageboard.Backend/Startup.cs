@@ -1,10 +1,12 @@
-using Imageboard.Backend.Models;
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+
+using Imageboard.Backend.Models;
+using Imageboard.Backend.Services;
 
 namespace Imageboard.Backend {
     public class Startup {
@@ -15,9 +17,14 @@ namespace Imageboard.Backend {
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services) {
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson(x => x.UseMemberCasing());
             services.AddCors();
-            services.AddDbContext<ImageboardContext>();
+
+            services.Configure<ImageboardDBSettings>(Configuration.GetSection(nameof(ImageboardDBSettings)));
+            services.AddSingleton<IImageboardDBSettings>(x => x.GetRequiredService<IOptions<ImageboardDBSettings>>().Value);
+            services.AddSingleton<BoardsService>();
+            services.AddSingleton<ThreadsService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {

@@ -22,13 +22,22 @@ export default class App extends React.Component<{}, State> {
             return '';
         }
 
-        let result: BoardsInfo = this.boardsInfo.filter(info => info.abbr === document.location.pathname.substr(1))[0];
+        let result: BoardsInfo = this.boardsInfo.filter(info => info.Abbr === document.location.pathname.substr(1))[0];
 
         if (document.location.pathname === '/' && !result) {
             return Constants.ImageboardName;
         }
 
-        return result.name;
+        return result.Name;
+    }
+
+    // Get the current page abbr (i.e. 'a' or 'b', etc.)
+    public get currentPageAbbr() : string {
+        if (this.boardsInfo.length === 0) {
+            return '';
+        }
+
+        return this.boardsInfo.filter(info => info.Abbr === document.location.pathname.substr(1))[0].Abbr;
     }
 
     constructor(props: any) {
@@ -56,7 +65,7 @@ export default class App extends React.Component<{}, State> {
                             <Route path="/" exact render={() => <Home boardsInfo={this.boardsInfo} />} />
 
                             {this.boardsInfo.map((item, key) => {
-                                return <Route path={'/' + item.abbr} exact render={() => <Board name={this.currentPageName} boardsInfo={this.boardsInfo} /> } key={key} />
+                                return <Route path={'/' + item.Abbr} exact render={() => <Board name={this.currentPageName} abbr={this.currentPageAbbr} boardsInfo={this.boardsInfo} /> } key={key} />
                             })}
 
                             <Route path="*" component={NotFound} />

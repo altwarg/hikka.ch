@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Constants, BoardsInfo, ThreadInfo } from './common';
+import { Constants, BoardsInfo, ThreadInfo, NewThreadDTO } from './common';
 
 const http = axios.create({
     baseURL: Constants.BackendURL,
@@ -13,7 +13,11 @@ export default class HttpHelper {
         return await http.get<BoardsInfo[]>('/boards/getBoards');
     }
 
-    public static async getThreadInfo() {
-        return await http.get<ThreadInfo[]>('/boards/threadInfo');
+    public static async getBoardThreads(board: string) {
+        return await http.get<ThreadInfo[]>(`/threads/all/${board}`);
+    }
+
+    public static async createNewThread(info: NewThreadDTO) {
+        return await http.post<ThreadInfo>('/threads/new', info);
     }
 }

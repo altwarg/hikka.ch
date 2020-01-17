@@ -12,6 +12,7 @@ import './Board.scss';
 type Props = {
     boardsInfo: BoardsInfo[];
     name: string;
+    abbr: string;
 }
 
 type State = {
@@ -29,7 +30,7 @@ export default class Board extends React.Component<Props, State> {
         this.state = { isLoading: true, showForm: false };
 
         // Fetching data about threads from backend
-        HttpHelper.getThreadInfo().then((res) => {
+        HttpHelper.getBoardThreads(this.props.abbr).then((res) => {
             this.threads = res.data;
             this.setState({ isLoading: false });
         });
@@ -64,7 +65,7 @@ export default class Board extends React.Component<Props, State> {
                         </div>
 
                         {this.state.showForm && (
-                            <PostFormControl />
+                            <PostFormControl abbr={this.props.abbr} />
                         )}
 
                         <br />
@@ -73,7 +74,11 @@ export default class Board extends React.Component<Props, State> {
                     </div>
 
                     <div id="content">
-                        <Thread threadInfo={this.threads} />
+                        {this.threads.map((item, key) => {
+                            return (
+                                <Thread threadInfo={item} key={key} />
+                            )
+                        })}
                     </div>
                 </div>
             );

@@ -1,16 +1,32 @@
 export class Constants {
-    public static ImageboardName: string = 'Hikka.ch';
+    public static ImageboardName: string = 'hikka.ch';
     public static BackendURL: string = 'https://localhost:51621/api';
 }
 
 export interface BoardsInfo {
-    abbr: string;
-    name: string;
+    Abbr: string;
+    Name: string;
 }
 
 export interface ThreadInfo {
-    id: string;
-    datetime: string;
-    message: string;
-    no: number;
+    Id: string;
+    Title: string;
+    Board: string;
+    PostsCount: number;
+    Posts: PostInfo[];
+}
+
+export interface PostInfo {
+    Id: string;
+    Name: string;
+    DateTime: string;
+    Message: string;
+    No: number;
+}
+
+export interface NewThreadDTO {
+    Title: string;
+    Board: string;
+    Name: string;
+    Message: string;
 }
