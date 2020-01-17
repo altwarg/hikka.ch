@@ -7,7 +7,6 @@ import './BoardsLinksControl.scss';
 
 type Props = {
     boardsInfo: BoardsInfo[];
-    name: string;
 }
 
 export default class BoardsLinksControl extends React.Component<Props> {
@@ -35,7 +34,7 @@ export default class BoardsLinksControl extends React.Component<Props> {
 
     componentDidMount() {
         if (this.props.boardsInfo !== []) {
-            this.forRendering = this.intersperce(this.props.boardsInfo.map(item => item.abbr), '/');
+            this.forRendering = this.intersperce(this.props.boardsInfo.map(item => item.Abbr), '/');
             this.setState({ fetchedInfo: this.props.boardsInfo });
         }
     }

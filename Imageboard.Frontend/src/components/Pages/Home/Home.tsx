@@ -28,7 +28,7 @@ export default class Home extends React.Component<Props> {
                                 return (
                                     <li className="list-group-item homepage__board borderless" key={key}>
                                         <strong>
-                                            <Link to={item.abbr} className="homepage__board__link">{item.abbr} — {item.name}</Link>
+                                            <Link to={item.Abbr} className="homepage__board__link">{item.Abbr} — {item.Name}</Link>
                                         </strong>
                                     </li>
                                 );

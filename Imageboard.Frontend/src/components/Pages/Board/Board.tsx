@@ -2,6 +2,7 @@ import React from 'react';
 
 import BoardsLinksControl from '../../Controls/BoardsLinksControl/BoardsLinksControl';
 import BoardsDescriptionControl from '../../Controls/BoardsDescriptionControl/BoardsDescriptionControl';
+import PostFormControl from '../../Controls/PostFormControl/PostFormControl';
 import Thread from '../Thread/Thread';
 import HttpHelper from '../../../httpHelper';
 import { BoardsInfo, ThreadInfo } from '../../../common';
@@ -11,10 +12,12 @@ import './Board.scss';
 type Props = {
     boardsInfo: BoardsInfo[];
     name: string;
+    abbr: string;
 }
 
 type State = {
     isLoading: boolean;
+    showForm: boolean;
 }
 
 export default class Board extends React.Component<Props, State> {
@@ -24,10 +27,10 @@ export default class Board extends React.Component<Props, State> {
         super(props);
 
         this.threads = [];
-        this.state = { isLoading: true };
+        this.state = { isLoading: true, showForm: false };
 
         // Fetching data about threads from backend
-        HttpHelper.getThreadInfo().then((res) => {
+        HttpHelper.getBoardThreads(this.props.abbr).then((res) => {
             this.threads = res.data;
             this.setState({ isLoading: false });
         });
@@ -41,15 +44,41 @@ export default class Board extends React.Component<Props, State> {
             return (
                 <div id="content">
                     <div className="boards-links-control">
-                        <BoardsLinksControl name={this.props.name} boardsInfo={this.props.boardsInfo} />
+                        <BoardsLinksControl boardsInfo={this.props.boardsInfo} />
                     </div>
 
                     <div id="description">
                         <BoardsDescriptionControl name={this.props.name} />
+
+                        <div className="clickable-link__container">
+                            {this.state.showForm && (
+                                <span className="clickable-link" onClick={() => this.setState({ showForm: false })}>
+                                    Close posting form
+                                </span>
+                            )}
+
+                            {!this.state.showForm && (
+                                <span className="clickable-link" onClick={() => this.setState({ showForm: true })}>
+                                    Open posting form
+                                </span>
+                            )}
+                        </div>
+
+                        {this.state.showForm && (
+                            <PostFormControl abbr={this.props.abbr} />
+                        )}
+
+                        <br />
+
+                        <hr />
                     </div>
 
                     <div id="content">
-                        <Thread threadInfo={this.threads} />
+                        {this.threads.map((item, key) => {
+                            return (
+                                <Thread threadInfo={item} key={key} />
+                            )
+                        })}
                     </div>
                 </div>
             );

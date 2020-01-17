@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import { Constants } from '../../../common';
 
@@ -17,28 +17,27 @@ export default class BoardsDescriptionControl extends React.Component<Props> {
     }
 
     render() {
-        if (this.props.name !== '' && this.props.name !== Constants.ImageboardName) {
-            return (
-                <div>
-                    <h1 className="text-center">{this.props.name}</h1>
+        return (
+            <Fragment>
+                {this.props.name !== '' && this.props.name !== Constants.ImageboardName && (
+                    <Fragment>
+                        <h1 className="text-center">{this.props.name}</h1>
 
-                    <hr />
-                </div>
-            );
-        } else {
-            return (
-                <div>
-                    <h1 className="text-center">{Constants.ImageboardName}</h1>
-                    <h2 className="text-center">Welcome. Once again</h2>
+                        <hr />
+                    </Fragment>
+                )}
+                {this.props.name === Constants.ImageboardName && (
+                    <Fragment>
+                        <h1 className="text-center">{Constants.ImageboardName}</h1>
+                        <h2 className="text-center">Welcome. Once again</h2>
 
-                    <hr />
+                        <hr />
 
-                    <div>
                         <h3 className="text-center">What is {Constants.ImageboardName}?</h3>
-                        <p>{Constants.ImageboardName} is a simple image-based bulletin board where anyone can post comments and share images. There are boards dedicated to a variety of topics, from Japanese animation and culture to videogames, music and photography. Users to not need to register an account before participating in the commutiny. Fell free to click on a board below that interests you and jump right in!</p>
-                    </div>
-                </div>
-            );
-        }
+                        <p>{Constants.ImageboardName} is a simple image-based bulletin board where anyone can post comments and share images. There are boards dedicated to a variety of topics, from Japanese animation and culture to videogames, music and photography. Users not need to register an account before participating in the commutiny. Fell free to click on a board below that interests you and jump right in!</p>
+                    </Fragment>
+                )}
+            </Fragment>
+        );
     }
 }
