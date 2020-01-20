@@ -48,7 +48,7 @@ export default class BoardsLinksControl extends React.Component<Props> {
                 <strong>
                     {this.forRendering.map((item, key) => {
                         if (item !== '/') {
-                            return <Link to={item} className="board-navigation__link" key={key}>{item}</Link>;
+                            return <Link to={'/' + item} className="board-navigation__link" key={key}>{item}</Link>;
                         } else {
                             return <span key={key}> {item} </span>;
                         }

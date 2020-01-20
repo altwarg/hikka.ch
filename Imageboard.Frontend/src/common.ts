@@ -30,3 +30,9 @@ export interface NewThreadDTO {
     Name: string;
     Message: string;
 }
+
+export interface NewPostDTO {
+    Thread: string;
+    Name: string;
+    Message: string;
+}

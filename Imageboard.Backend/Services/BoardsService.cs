@@ -20,7 +20,7 @@ namespace Imageboard.Backend.Services {
             return this.boards.Find(x => true).ToList();
         }
 
-        public bool HasBoard(string abbr) {
+        public bool BoardExists(string abbr) {
             if (this.boards.Find(x => x.Abbr == abbr).FirstOrDefault() == null) {
                 return false;
             }

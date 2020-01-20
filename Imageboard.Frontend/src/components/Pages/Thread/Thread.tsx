@@ -7,6 +7,7 @@ import './Thread.scss';
 
 type Props = {
     threadInfo: ThreadInfo;
+    opened: boolean;
 }
 
 export default class Thread extends React.Component<Props> {
@@ -16,7 +17,7 @@ export default class Thread extends React.Component<Props> {
                 {this.props.threadInfo.Posts.map((item, key) => {
                     return (
                         <div className={item.No === 1 ? "thread__oppost" : "thread__post"} key={key}>
-                            <PostItemControl info={item} />
+                            <PostItemControl info={item} title={this.props.threadInfo.Title} threadOpened={this.props.opened} board={this.props.threadInfo.Board} id={this.props.threadInfo.Id} />
                         </div>
                     );
                 })}

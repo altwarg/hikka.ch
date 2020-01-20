@@ -25,8 +25,25 @@ namespace Imageboard.Backend.Controllers {
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         public IActionResult GetThreads([FromRoute] string abbr) {
-            if (this.boardsService.HasBoard(abbr)) {
+            if (this.boardsService.BoardExists(abbr)) {
                 return Ok(this.threadsService.GetThreads(abbr));
+            } else {
+                return NotFound();
+            }
+        }
+
+        [HttpGet("all")]
+        [ProducesResponseType(200)]
+        public IActionResult GetAllThreads() {
+            return Ok(this.threadsService.GetAllThreads());
+        }
+
+        [HttpPost("new/post/{threadId}")]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(404)]
+        public IActionResult CreatePost([FromRoute] string threadId, [FromBody] NewPostDTO data) {
+            if (this.threadsService.ThreadExists(threadId)) {
+                return Created("", this.threadsService.CreatePost(data));
             } else {
                 return NotFound();
             }

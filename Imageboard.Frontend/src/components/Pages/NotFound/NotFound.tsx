@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { Constants } from '../../../common';
 
@@ -20,7 +21,9 @@ export default class NotFound extends React.Component {
         return (
             <div id="content">
                 <div id="logo">
-                    <h1 className="text-center">{Constants.ImageboardName}</h1>
+                    <h1 className="text-center">
+                        <span><Link to="/" className="link">{Constants.ImageboardName}</Link></span>
+                    </h1>
                 </div>
                 <div className="box">
                     <div className="box__data">

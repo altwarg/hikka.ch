@@ -1,9 +1,11 @@
 import React, { Fragment } from 'react';
 
 import { Constants } from '../../../common';
+import { Link } from 'react-router-dom';
 
 type Props = {
     name: string;
+    abbr: string;
 }
 
 export default class BoardsDescriptionControl extends React.Component<Props> {
@@ -21,7 +23,9 @@ export default class BoardsDescriptionControl extends React.Component<Props> {
             <Fragment>
                 {this.props.name !== '' && this.props.name !== Constants.ImageboardName && (
                     <Fragment>
-                        <h1 className="text-center">{this.props.name}</h1>
+                        <h1 className="text-center">
+                            <span><Link to={'/' + this.props.abbr} className="link">{this.props.name}</Link></span>
+                        </h1>
 
                         <hr />
                     </Fragment>

@@ -11,6 +11,8 @@ import './Board.scss';
 
 type Props = {
     boardsInfo: BoardsInfo[];
+    threadInfo: ThreadInfo | null;
+    threadOpened: boolean;
     name: string;
     abbr: string;
 }
@@ -27,13 +29,21 @@ export default class Board extends React.Component<Props, State> {
         super(props);
 
         this.threads = [];
-        this.state = { isLoading: true, showForm: false };
 
-        // Fetching data about threads from backend
-        HttpHelper.getBoardThreads(this.props.abbr).then((res) => {
-            this.threads = res.data;
-            this.setState({ isLoading: false });
-        });
+        if (this.props.threadInfo === null) {
+            this.state = { isLoading: true, showForm: false };
+
+            // Fetching data about threads from backend
+            HttpHelper.getBoardThreads(this.props.abbr).then((res) => {
+                this.threads = res.data;
+                this.setState({ isLoading: false });
+            });
+        } else {
+            this.state = { isLoading: false, showForm: false };
+
+            // We've opened thread -- no data fetching needed
+            this.threads.push(this.props.threadInfo);
+        }
     }
 
     render() {
@@ -48,7 +58,7 @@ export default class Board extends React.Component<Props, State> {
                     </div>
 
                     <div id="description">
-                        <BoardsDescriptionControl name={this.props.name} />
+                        <BoardsDescriptionControl name={this.props.name} abbr={this.props.abbr} />
 
                         <div className="clickable-link__container">
                             {this.state.showForm && (
@@ -65,7 +75,7 @@ export default class Board extends React.Component<Props, State> {
                         </div>
 
                         {this.state.showForm && (
-                            <PostFormControl abbr={this.props.abbr} />
+                            <PostFormControl abbr={this.props.abbr} threadOpened={this.props.threadOpened} />
                         )}
 
                         <br />
@@ -76,7 +86,7 @@ export default class Board extends React.Component<Props, State> {
                     <div id="content">
                         {this.threads.map((item, key) => {
                             return (
-                                <Thread threadInfo={item} key={key} />
+                                <Thread threadInfo={item} key={key} opened={this.props.threadOpened} />
                             )
                         })}
                     </div>

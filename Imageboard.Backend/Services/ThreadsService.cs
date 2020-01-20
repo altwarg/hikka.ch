@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using MongoDB.Driver;
 
@@ -25,6 +26,22 @@ namespace Imageboard.Backend.Services {
             return this.threads.Find(x => x.Board == abbr).ToList();
         }
 
+        public Thread GetThread(string id) {
+            return this.threads.Find(x => x.Id == id).FirstOrDefault();
+        }
+
+        public List<Thread> GetAllThreads() {
+            return this.threads.Find(x => true).ToList();
+        }
+
+        public bool ThreadExists(string id) {
+            if (this.threads.Find(x => x.Id == id).FirstOrDefault() == null) {
+                return false;
+            }
+
+            return true;
+        }
+
         public Thread CreateThread(NewThreadDTO data) {
             this.count += 1;
 
@@ -32,7 +49,7 @@ namespace Imageboard.Backend.Services {
                 Id = this.count.ToString(),
                 No = 1,
                 Name = !string.IsNullOrEmpty(data.Name) ? data.Name : null,
-                DateTime = DateTime.Now.ToLongDateString(),
+                DateTime = DateTime.Now.ToString("dd/MM/yyyy ddd HH:mm:ss"),
                 Message = data.Message
             };
 
@@ -45,6 +62,26 @@ namespace Imageboard.Backend.Services {
             };
 
             this.threads.InsertOne(thread);
+            return thread;
+        }
+
+        public Thread CreatePost(NewPostDTO data) {
+            this.count += 1;
+
+            var thread = this.GetThread(data.Thread);
+            var no = thread.Posts.Last().No + 1;
+
+            var post = new Post() {
+                Id = this.count.ToString(),
+                No = no,
+                Name = null,
+                DateTime = DateTime.Now.ToString("dd/MM/yyyy ddd HH:mm:ss"),
+                Message = data.Message
+            };
+
+            thread.Posts.Add(post);
+
+            this.threads.ReplaceOne(x => x.Id == data.Thread, thread);
             return thread;
         }
     }

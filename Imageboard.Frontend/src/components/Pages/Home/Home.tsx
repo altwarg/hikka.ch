@@ -15,7 +15,7 @@ export default class Home extends React.Component<Props> {
         return(
             <div id="content">
                 <div id="description">
-                    <BoardsDescriptionControl name={Constants.ImageboardName} />
+                    <BoardsDescriptionControl name={Constants.ImageboardName} abbr="/" />
                 </div>
 
                 <hr />
