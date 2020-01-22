@@ -1,7 +1,5 @@
-// Connecting to 'Imageboard' database. If it doesn't exists, MongoDB will eventually create it
 let db = connect('127.0.0.1:27017/Imageboard');
 
-// Inserting initial information about boards to 'Boards' collection. If it doesn't exists, MongoDB will eventually create it
 db.Boards.insertMany([
     { Abbr: 'a', Name: 'Anime' },
     { Abbr: 'b', Name: 'Random' },
@@ -15,10 +13,23 @@ db.Boards.insertMany([
     { Abbr: 'zog', Name: 'Conspiration theories' },
 ]);
 
-// Set a reference to all documents in the 'Boards' collection of 'Imageboard' database
 let boards = db.Boards.find();
 
-// Iterating over the collection and printing the content
+print('Inserted values to "Boards" collection:\n');
+
 while (boards.hasNext()) {
     printjson(boards.next());
+}
+
+print('\n\nInserted values to "Counters" collection:\n')
+
+db.Counters.insert({
+    Name: 'postId',
+    Value: 0
+});
+
+let counters = db.Counters.find();
+
+while (counters.hasNext()) {
+    printjson(counters.next());
 }

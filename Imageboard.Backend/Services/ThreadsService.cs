@@ -13,13 +13,11 @@ namespace Imageboard.Backend.Services {
         private readonly MongoClient client;
         private readonly IMongoDatabase database;
         private readonly IMongoCollection<Thread> threads;
-        private long count;
 
         public ThreadsService(IImageboardDBSettings settings) {
             this.client = new MongoClient(settings.ConnectionString);
             this.database = this.client.GetDatabase(settings.DatabaseName);
             this.threads = this.database.GetCollection<Thread>(settings.ThreadsCollectionName);
-            this.count = 0;
         }
 
         public List<Thread> GetThreads(string abbr) {
@@ -43,10 +41,8 @@ namespace Imageboard.Backend.Services {
         }
 
         public Thread CreateThread(NewThreadDTO data) {
-            this.count += 1;
-
             var post = new Post() {
-                Id = this.count.ToString(),
+                Id = Counter.GetNextSequenceValue("postId", this.database).ToString(),
                 No = 1,
                 Name = !string.IsNullOrEmpty(data.Name) ? data.Name : null,
                 DateTime = DateTime.Now.ToString("dd/MM/yyyy ddd HH:mm:ss"),
@@ -66,13 +62,11 @@ namespace Imageboard.Backend.Services {
         }
 
         public Thread CreatePost(NewPostDTO data) {
-            this.count += 1;
-
             var thread = this.GetThread(data.Thread);
             var no = thread.Posts.Last().No + 1;
 
             var post = new Post() {
-                Id = this.count.ToString(),
+                Id = Counter.GetNextSequenceValue("postId", this.database).ToString(),
                 No = no,
                 Name = null,
                 DateTime = DateTime.Now.ToString("dd/MM/yyyy ddd HH:mm:ss"),
