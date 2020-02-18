@@ -10,7 +10,8 @@ import { BoardsInfo, Constants, ThreadInfo } from '../common';
 import './App.scss';
 
 type State = {
-    isLoading: boolean;
+    boardsLoaded: boolean;
+    threadsLoaded: boolean;
 }
 
 export default class App extends React.Component<{}, State> {
@@ -46,23 +47,24 @@ export default class App extends React.Component<{}, State> {
 
         this.boardsInfo = [];
         this.threadsInfo = [];
-        this.state = { isLoading: true };
+        this.state = { threadsLoaded: false, boardsLoaded: false };
 
         // Fetching boards info from backend
         HttpHelper.getBoardsInfo().then((res) => {
             this.boardsInfo = res.data;
+            this.setState({ boardsLoaded: true });
         });
 
         // Fetching threads info from backend and updating routes
         HttpHelper.getAllThreads().then((res) => {
             this.threadsInfo = res.data;
-            this.setState({ isLoading: false });
+            this.setState({ threadsLoaded: true });
         })
     }
 
     render() {
-        if (this.state.isLoading) {
-            console.log("Loading boards, please wait...");
+        if (!(this.state.threadsLoaded && this.state.boardsLoaded)) {
+            console.log("Loading, please wait...");
             return(<div />);
         } else {
             return (
