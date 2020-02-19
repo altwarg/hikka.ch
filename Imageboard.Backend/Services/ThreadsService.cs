@@ -24,6 +24,22 @@ namespace Imageboard.Backend.Services {
             return this.threads.Find(x => x.Board == abbr).ToList();
         }
 
+        public List<Thread> GetThreads(string abbr, int limit) {
+            var threads = this.threads.Find(x => x.Board == abbr).ToList();
+            foreach (var thread in threads) {
+                var opPost = thread.Posts[0];
+                var posts = thread.Posts.TakeLast(3).ToList();
+
+                if (!posts.Contains(opPost)) {
+                    posts.Insert(0, opPost);
+                }
+
+                thread.Posts = posts;
+            }
+
+            return threads;
+        }
+
         public Thread GetThread(string id) {
             return this.threads.Find(x => x.Id == id).FirstOrDefault();
         }
@@ -74,6 +90,7 @@ namespace Imageboard.Backend.Services {
             };
 
             thread.Posts.Add(post);
+            thread.PostsCount = thread.Posts.Count;
 
             this.threads.ReplaceOne(x => x.Id == data.Thread, thread);
             return thread;

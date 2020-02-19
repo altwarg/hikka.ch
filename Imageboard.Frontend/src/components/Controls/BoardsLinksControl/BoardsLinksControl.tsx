@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { BoardsInfo } from '../../../common';
+import { Board } from '../../../common';
 
 import './BoardsLinksControl.scss';
 
 type Props = {
-    boardsInfo: BoardsInfo[];
+    boardsInfo: Board[];
 }
 
 export default class BoardsLinksControl extends React.Component<Props> {

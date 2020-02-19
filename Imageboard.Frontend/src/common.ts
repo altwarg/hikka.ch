@@ -3,20 +3,20 @@ export class Constants {
     public static BackendURL: string = 'https://localhost:51621/api';
 }
 
-export interface BoardsInfo {
+export interface Board {
     Abbr: string;
     Name: string;
 }
 
-export interface ThreadInfo {
+export interface Thread {
     Id: string;
     Title: string;
     Board: string;
     PostsCount: number;
-    Posts: PostInfo[];
+    Posts: Post[];
 }
 
-export interface PostInfo {
+export interface Post {
     Id: string;
     Name: string;
     DateTime: string;

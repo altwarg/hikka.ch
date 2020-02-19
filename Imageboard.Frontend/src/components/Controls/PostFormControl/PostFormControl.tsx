@@ -7,7 +7,7 @@ import './PostFormControl.scss';
 
 type Props = {
     abbr: string;
-    threadOpened: boolean;
+    inThread: boolean;
 }
 
 type State = {
@@ -74,7 +74,7 @@ export default class PostFormControl extends React.Component<Props, State> {
 
                 <div className="postform__raw">
                     <input type="text" id="name" className="postform__input postform__input__inline input" placeholder="Name" onChange={(e) => this.setState({ name: e.target.value })} />
-                    <input type="submit" id="submitDesktop" className="button desktop" value="Send" onClick={(e) => this.props.threadOpened ? this.createPost(e) : this.createThread(e)} />
+                    <input type="submit" id="submitDesktop" className="button desktop" value="Send" onClick={(e) => this.props.inThread ? this.createPost(e) : this.createThread(e)} />
                 </div>
 
                 <div className="postform__raw">
@@ -94,7 +94,7 @@ export default class PostFormControl extends React.Component<Props, State> {
                 </div>
 
                 <div className="mobile">
-                    <input type="submit" id="submitMobile" className="mobile button-mobile" value="Send" onClick={(e) => this.props.threadOpened ? this.createPost(e) : this.createThread(e)} />
+                    <input type="submit" id="submitMobile" className="mobile button-mobile" value="Send" onClick={(e) => this.props.inThread ? this.createPost(e) : this.createThread(e)} />
                 </div>
             </form>
         );

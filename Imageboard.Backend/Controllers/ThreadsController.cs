@@ -32,6 +32,17 @@ namespace Imageboard.Backend.Controllers {
             }
         }
 
+        [HttpGet("all/{abbr}/limit/{limit}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public IActionResult GetThreads([FromRoute] string abbr, [FromRoute] int limit) {
+            if (this.boardsService.BoardExists(abbr)) {
+                return Ok(this.threadsService.GetThreads(abbr, limit));
+            } else {
+                return NotFound();
+            }
+        }
+
         [HttpGet("all")]
         [ProducesResponseType(200)]
         public IActionResult GetAllThreads() {
@@ -44,6 +55,19 @@ namespace Imageboard.Backend.Controllers {
         public IActionResult CreatePost([FromRoute] string threadId, [FromBody] NewPostDTO data) {
             if (this.threadsService.ThreadExists(threadId)) {
                 return Created("", this.threadsService.CreatePost(data));
+            } else {
+                return NotFound();
+            }
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public IActionResult GetThreadById([FromRoute] string id) {
+            var thread = this.threadsService.GetThread(id);
+
+            if (thread != null) {
+                return Ok(thread);
             } else {
                 return NotFound();
             }

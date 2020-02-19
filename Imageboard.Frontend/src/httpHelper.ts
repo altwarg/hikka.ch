@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Constants, BoardsInfo, ThreadInfo, NewThreadDTO, NewPostDTO } from './common';
+import { Constants, Board, Thread, NewThreadDTO, NewPostDTO } from './common';
 
 const http = axios.create({
     baseURL: Constants.BackendURL,
@@ -9,23 +9,27 @@ const http = axios.create({
 })
 
 export default class HttpHelper {
-    public static async getBoardsInfo() {
-        return await http.get<BoardsInfo[]>('/boards/getBoards');
+    public static async getBoards() {
+        return await http.get<Board[]>('/boards/getBoards');
     }
 
     public static async getBoardThreads(board: string) {
-        return await http.get<ThreadInfo[]>(`/threads/all/${board}`);
+        return await http.get<Thread[]>(`/threads/all/${board}/limit/3`);
     }
 
     public static async createNewThread(info: NewThreadDTO) {
-        return await http.post<ThreadInfo>('/threads/new', info);
+        return await http.post<Thread>('/threads/new', info);
     }
 
     public static async getAllThreads() {
-        return await http.get<ThreadInfo[]>('/threads/all');
+        return await http.get<Thread[]>('/threads/all');
     }
 
     public static async createNewPost(info: NewPostDTO, thread: string) {
-        return await http.post<ThreadInfo>(`/threads/new/post/${thread}`, info);
+        return await http.post<Thread>(`/threads/new/post/${thread}`, info);
+    }
+
+    public static async getThreadById(id: string) {
+        return await http.get<Thread>(`/threads/${id}`);
     }
 }

@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 
 import { Constants } from '../../../common';
 
-import './NotFound.scss';
+import './NotFoundPage.scss';
 
-export default class NotFound extends React.Component {
+export default class NotFoundPage extends React.Component {
     // Here just add additional pics or gifs
     private images: string[] = [ "/404/404_1.jpg", "/404/404_2.gif", "/404/404_3.png", "/404/404_4.jpg", "/404/404_5.png" ];
 

@@ -1,16 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { PostInfo } from '../../../common';
+import { Post } from '../../../common';
 
 import './PostItemControl.scss';
 
 type Props = {
-    info: PostInfo;
+    info: Post;
     title: string;
     board: string;
     id: string;
-    threadOpened: boolean;
+    inThread: boolean;
 }
 
 export default class PostItemControl extends React.Component<Props> {
@@ -24,7 +24,7 @@ export default class PostItemControl extends React.Component<Props> {
                     <span className="post__anon">{this.props.info.Name !== null && this.props.info.Name !== '' ? this.props.info.Name : 'Anonymous' }</span>
                     <span className="post__time">{this.props.info.DateTime}</span>
                     <span className="post__id">No. <span className="post__id-reply">{this.props.info.Id}</span></span>
-                    { this.props.info.No === 1 && !this.props.threadOpened && (
+                    { this.props.info.No === 1 && !this.props.inThread && (
                         <span><Link to={'/' + this.props.board + '/' + this.props.id} className="link">Open thread</Link></span>
                     )}
                 </div>
