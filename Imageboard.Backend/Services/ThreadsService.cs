@@ -28,7 +28,7 @@ namespace Imageboard.Backend.Services {
             var threads = this.threads.Find(x => x.Board == abbr).ToList();
             foreach (var thread in threads) {
                 var opPost = thread.Posts[0];
-                var posts = thread.Posts.TakeLast(3).ToList();
+                var posts = thread.Posts.TakeLast(limit).ToList();
 
                 if (!posts.Contains(opPost)) {
                     posts.Insert(0, opPost);

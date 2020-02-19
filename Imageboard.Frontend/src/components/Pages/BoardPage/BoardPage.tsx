@@ -1,4 +1,5 @@
 import React from 'react';
+import { AxiosError } from 'axios';
 
 import BoardsLinksControl from '../../Controls/BoardsLinksControl/BoardsLinksControl';
 import BoardsDescriptionControl from '../../Controls/BoardsDescriptionControl/BoardsDescriptionControl';
@@ -8,6 +9,7 @@ import HttpHelper from '../../../httpHelper';
 import { Board, Thread } from '../../../common';
 
 import './BoardPage.scss';
+
 
 type Props = {
     links: Board[];
@@ -19,6 +21,7 @@ type Props = {
 type State = {
     loaded: boolean;
     showForm: boolean;
+    noConnection: boolean;
 }
 
 export default class BoardPage extends React.Component<Props, State> {
@@ -28,7 +31,7 @@ export default class BoardPage extends React.Component<Props, State> {
         super(props);
 
         this.threads = [];
-        this.state = { loaded: false, showForm: false };
+        this.state = { loaded: false, showForm: false, noConnection: false };
 
         if (this.props.inThread === true) {
             // We've opened thread
@@ -36,17 +39,27 @@ export default class BoardPage extends React.Component<Props, State> {
             HttpHelper.getThreadById(id).then((res) => {
                 this.threads.push(res.data);
                 this.setState({ loaded: true });
+            }).catch((err: AxiosError) => {
+                if (err.message === "Network Error") {
+                    this.setState({ noConnection: true });
+                }
             });
         } else {
             HttpHelper.getBoardThreads(this.props.abbr).then((res) => {
                 this.threads = res.data;
                 this.setState({ loaded: true });
+            }).catch((err: AxiosError) => {
+                if (err.message === "Network Error") {
+                    this.setState({ noConnection: true });
+                }
             });
         }
     }
 
     render() {
-        if (!this.state.loaded) {
+        if (this.state.noConnection) {
+            return (<div>No connection with backend</div>);
+        } else if (!this.state.loaded) {
             return(<div />);
         } else {
             return (

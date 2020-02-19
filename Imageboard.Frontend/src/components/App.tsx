@@ -12,6 +12,7 @@ import './App.scss';
 type State = {
     boardsLoaded: boolean;
     threadsLoaded: boolean;
+    noConnection: boolean;
 }
 
 export default class App extends React.Component<{}, State> {
@@ -47,23 +48,29 @@ export default class App extends React.Component<{}, State> {
 
         this.boards = [];
         this.threads = [];
-        this.state = { threadsLoaded: false, boardsLoaded: false };
+        this.state = { threadsLoaded: false, boardsLoaded: false, noConnection: false };
 
         // Fetching boards info from backend
         HttpHelper.getBoards().then((res) => {
             this.boards = res.data;
             this.setState({ boardsLoaded: true });
-        });
+        }).catch(() => {
+            this.setState({ noConnection: true });
+        })
 
         // Fetching threads info from backend and updating routes
         HttpHelper.getAllThreads().then((res) => {
             this.threads = res.data;
             this.setState({ threadsLoaded: true });
+        }).catch((err: Error) => {
+            this.setState({ noConnection: true });
         })
     }
 
     render() {
-        if (!(this.state.threadsLoaded && this.state.boardsLoaded)) {
+        if (this.state.noConnection) {
+            return (<div>No connection with backend</div>);
+        } else if (!(this.state.threadsLoaded && this.state.boardsLoaded)) {
             return(<div />);
         } else {
             return (

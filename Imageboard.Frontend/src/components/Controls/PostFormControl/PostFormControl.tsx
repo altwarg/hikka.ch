@@ -1,4 +1,5 @@
 import React from 'react';
+import { AxiosError } from 'axios';
 
 import { NewThreadDTO, NewPostDTO } from '../../../common';
 import HttpHelper from '../../../httpHelper';
@@ -46,8 +47,10 @@ export default class PostFormControl extends React.Component<Props, State> {
         HttpHelper.createNewThread(dto).then((res) => {
             window.location.reload();
             window.location.href = `/${res.data.Board}/${res.data.Id}`;
-        }).catch((err) => {
-            alert('Something went wrong');
+        }).catch((err: AxiosError) => {
+            if (err.message === "Network Error") {
+                console.log(err.message);
+            }
         });
     }
 
@@ -62,8 +65,12 @@ export default class PostFormControl extends React.Component<Props, State> {
         // Attempt to create new post
         HttpHelper.createNewPost(dto, dto.Thread).then((res) => {
             window.location.reload();
-        }).catch((err) => {
-            alert('Something went wrong');
+        }).catch((err: AxiosError) => {
+            if (err.message === "Network Error") {
+                console.log(err.message);
+            } else if (err.response?.status === 404) {
+                console.log("Thread does not exist");
+            }
         })
     }
 
