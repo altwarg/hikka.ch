@@ -172,3 +172,15 @@ textarea {
         }
     }
 }
+
+.link {
+    cursor: pointer;
+    font-weight: bold;
+    user-select: none;
+    color: black;
+    text-decoration: none;
+
+    &:hover {
+        color: #a9a9a6;
+    }
+}

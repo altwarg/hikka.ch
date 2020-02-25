@@ -1,28 +1,32 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-import Home from './Pages/Home/Home';
-import NotFound from './Pages/NotFound/NotFound';
-import Board from './Pages/Board/Board';
+import HomePage from './Pages/HomePage/HomePage';
+import NotFoundPage from './Pages/NotFoundPage/NotFoundPage';
+import BoardPage from './Pages/BoardPage/BoardPage';
 import HttpHelper from '../httpHelper';
-import { BoardsInfo, Constants } from '../common';
+import { Board, Constants, Thread } from '../common';
 
 import './App.scss';
+import ThreadPage from './Pages/ThreadPage/ThreadPage';
 
 type State = {
-    isLoading: boolean;
+    boardsLoaded: boolean;
+    threadsLoaded: boolean;
+    noConnection: boolean;
 }
 
 export default class App extends React.Component<{}, State> {
-    private boardsInfo: BoardsInfo[];
+    private boards: Board[];
+    private threads: Thread[];
 
     // Get the current page name (i.e. "Anime" or "Random", etc.)
     public get currentPageName() : string {
-        if (this.boardsInfo.length === 0) {
+        if (this.boards.length === 0) {
             return '';
         }
 
-        let result: BoardsInfo = this.boardsInfo.filter(info => info.Abbr === document.location.pathname.substr(1))[0];
+        let result: Board = this.boards.filter(board => board.Abbr === document.location.pathname.substr(1).split('/')[0])[0];
 
         if (document.location.pathname === '/' && !result) {
             return Constants.ImageboardName;
@@ -33,42 +37,62 @@ export default class App extends React.Component<{}, State> {
 
     // Get the current page abbr (i.e. 'a' or 'b', etc.)
     public get currentPageAbbr() : string {
-        if (this.boardsInfo.length === 0) {
+        if (this.boards.length === 0) {
             return '';
         }
 
-        return this.boardsInfo.filter(info => info.Abbr === document.location.pathname.substr(1))[0].Abbr;
+        return this.boards.filter(board => board.Abbr === document.location.pathname.substr(1).split('/')[0])[0].Abbr;
     }
 
     constructor(props: any) {
         super(props);
 
-        this.boardsInfo = [];
-        this.state = { isLoading: true };
+        this.boards = [];
+        this.threads = [];
+        this.state = { threadsLoaded: false, boardsLoaded: false, noConnection: false };
 
-        // Fetching boards info from backend and updating the state to enforce the components re-render
-        HttpHelper.getBoardsInfo().then((res) => {
-            this.boardsInfo = res.data;
-            this.setState({ isLoading: false });
-        });
+        // Fetching boards info from backend
+        HttpHelper.getBoards().then((res) => {
+            this.boards = res.data;
+            this.setState({ boardsLoaded: true });
+        }).catch(() => {
+            this.setState({ noConnection: true });
+        })
+
+        // Fetching threads info from backend and updating routes
+        HttpHelper.getAllThreads().then((res) => {
+            this.threads = res.data;
+            this.setState({ threadsLoaded: true });
+        }).catch((err: Error) => {
+            this.setState({ noConnection: true });
+        })
     }
 
     render() {
-        if (this.state.isLoading) {
-            console.log("Loading boards, please wait...");
+        if (this.state.noConnection) {
+            return (<div>No connection with backend</div>);
+        } else if (!(this.state.threadsLoaded && this.state.boardsLoaded)) {
             return(<div />);
         } else {
             return (
                 <BrowserRouter>
                     <div id="app">
                         <Switch>
-                            <Route path="/" exact render={() => <Home boardsInfo={this.boardsInfo} />} />
+                            {/* Home route */}
+                            <Route path="/" exact render={() => <HomePage links={this.boards} />} />
 
-                            {this.boardsInfo.map((item, key) => {
-                                return <Route path={'/' + item.Abbr} exact render={() => <Board name={this.currentPageName} abbr={this.currentPageAbbr} boardsInfo={this.boardsInfo} /> } key={key} />
+                            {/* Mapping the boars routes */}
+                            {this.boards.map((item, key) => {
+                                return <Route path={'/' + item.Abbr} exact render={() => <BoardPage name={this.currentPageName} abbr={this.currentPageAbbr} links={this.boards} inThread={false} /> } key={key} />
                             })}
 
-                            <Route path="*" component={NotFound} />
+                            {/* Mapping the threads routes */}
+                            {this.threads.map((item, key) => {
+                                return <Route path={'/' + item.Board + '/' + item.Id} exact render={() => <ThreadPage thread={item.Id} name={this.currentPageName} abbr={this.currentPageAbbr} links={this.boards} inThread={true} /> } key={key} />
+                            })}
+
+                            {/* Other routes (404) */}
+                            <Route path="*" component={NotFoundPage} />
                         </Switch>
                     </div>
                 </BrowserRouter>

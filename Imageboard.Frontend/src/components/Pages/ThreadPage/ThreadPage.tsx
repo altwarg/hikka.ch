@@ -1,54 +1,62 @@
 import React from 'react';
+import { AxiosError } from 'axios';
 
 import BoardsLinksControl from '../../Controls/BoardsLinksControl/BoardsLinksControl';
 import BoardsDescriptionControl from '../../Controls/BoardsDescriptionControl/BoardsDescriptionControl';
 import PostFormControl from '../../Controls/PostFormControl/PostFormControl';
-import Thread from '../Thread/Thread';
+import ThreadItemControl from '../../Controls/ThreadItemControl/ThreadItemControl';
 import HttpHelper from '../../../httpHelper';
-import { BoardsInfo, ThreadInfo } from '../../../common';
+import { Thread, Board } from '../../../common';
 
-import './Board.scss';
+import './ThreadPage.scss';
 
 type Props = {
-    boardsInfo: BoardsInfo[];
+    links: Board[];
+    inThread: boolean;
     name: string;
     abbr: string;
+    thread: string;
 }
 
 type State = {
-    isLoading: boolean;
+    loaded: boolean;
     showForm: boolean;
+    noConnection: boolean;
 }
 
-export default class Board extends React.Component<Props, State> {
-    private threads: ThreadInfo[];
+export default class ThreadPage extends React.Component<Props, State> {
+    private thread: Thread | null;
 
     constructor(props: Props) {
         super(props);
 
-        this.threads = [];
-        this.state = { isLoading: true, showForm: false };
+        this.thread = null;
+        this.state = { loaded: false, showForm: false, noConnection: false };
 
-        // Fetching data about threads from backend
-        HttpHelper.getBoardThreads(this.props.abbr).then((res) => {
-            this.threads = res.data;
-            this.setState({ isLoading: false });
+        HttpHelper.getThreadById(this.props.thread).then((res) => {
+            this.thread = res.data;
+            this.setState({ loaded: true });
+        }).catch((err: AxiosError) => {
+            if (err.message === "NetworkError") {
+                this.setState({ noConnection: true });
+            }
         });
     }
 
     render() {
-        if (this.state.isLoading) {
-            console.log("Loading threads, please wait...");
-            return(<div />);
+        if (this.state.noConnection) {
+            return (<div>No connection with backend</div>);
+        } else if (!this.state.loaded) {
+            return (<div />);
         } else {
             return (
                 <div id="content">
                     <div className="boards-links-control">
-                        <BoardsLinksControl boardsInfo={this.props.boardsInfo} />
+                        <BoardsLinksControl boardsInfo={this.props.links} />
                     </div>
 
                     <div id="description">
-                        <BoardsDescriptionControl name={this.props.name} />
+                        <BoardsDescriptionControl name={this.props.name} abbr={this.props.abbr} />
 
                         <div className="clickable-link__container">
                             {this.state.showForm && (
@@ -65,7 +73,7 @@ export default class Board extends React.Component<Props, State> {
                         </div>
 
                         {this.state.showForm && (
-                            <PostFormControl abbr={this.props.abbr} />
+                            <PostFormControl abbr={this.props.abbr} inThread={this.props.inThread} />
                         )}
 
                         <br />
@@ -74,11 +82,7 @@ export default class Board extends React.Component<Props, State> {
                     </div>
 
                     <div id="content">
-                        {this.threads.map((item, key) => {
-                            return (
-                                <Thread threadInfo={item} key={key} />
-                            )
-                        })}
+                        <ThreadItemControl thread={this.thread} inThread={this.props.inThread} />
                     </div>
                 </div>
             );

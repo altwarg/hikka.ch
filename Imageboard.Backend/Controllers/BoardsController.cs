@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 using Imageboard.Backend.Services;
 
@@ -12,8 +13,8 @@ namespace Imageboard.Backend.Controllers {
             this.boardsService = boardsService;
         }
 
-        [HttpGet("getBoards")]
-        [ProducesResponseType(200)]
+        [HttpGet("all")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetAllBoards() {
             return Ok(this.boardsService.GetBoards());
         }

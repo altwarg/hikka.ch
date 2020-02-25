@@ -1,12 +1,14 @@
 import React from 'react';
+import { AxiosError } from 'axios';
 
-import { NewThreadDTO } from '../../../common';
+import { NewThreadDTO, NewPostDTO } from '../../../common';
 import HttpHelper from '../../../httpHelper';
 
 import './PostFormControl.scss';
 
 type Props = {
     abbr: string;
+    inThread: boolean;
 }
 
 type State = {
@@ -43,8 +45,33 @@ export default class PostFormControl extends React.Component<Props, State> {
 
         // Attempt to create new thread
         HttpHelper.createNewThread(dto).then((res) => {
-            console.log(res.data);
+            window.location.reload();
+            window.location.href = `/${res.data.Board}/${res.data.Id}`;
+        }).catch((err: AxiosError) => {
+            if (err.message === "Network Error") {
+                console.log(err.message);
+            }
         });
+    }
+
+    private createPost(e: React.MouseEvent) {
+        e.preventDefault();
+        let dto = {
+            Name: this.state.name,
+            Message: this.state.comment,
+            Thread: window.location.pathname.substr(1).split('/')[1]
+        } as NewPostDTO;
+
+        // Attempt to create new post
+        HttpHelper.createNewPost(dto).then((res) => {
+            window.location.reload();
+        }).catch((err: AxiosError) => {
+            if (err.message === "Network Error") {
+                console.log(err.message);
+            } else if (err.response?.status === 404) {
+                console.log("Thread does not exist");
+            }
+        })
     }
 
     render() {
@@ -54,7 +81,7 @@ export default class PostFormControl extends React.Component<Props, State> {
 
                 <div className="postform__raw">
                     <input type="text" id="name" className="postform__input postform__input__inline input" placeholder="Name" onChange={(e) => this.setState({ name: e.target.value })} />
-                    <input type="submit" id="submitDesktop" className="button desktop" value="Send" onClick={(e) => this.createThread(e)} />
+                    <input type="submit" id="submitDesktop" className="button desktop" value="Send" onClick={(e) => this.props.inThread ? this.createPost(e) : this.createThread(e)} />
                 </div>
 
                 <div className="postform__raw">
@@ -74,7 +101,7 @@ export default class PostFormControl extends React.Component<Props, State> {
                 </div>
 
                 <div className="mobile">
-                    <input type="submit" id="submitMobile" className="mobile button-mobile" value="Send" onClick={(e) => this.createThread(e)} />
+                    <input type="submit" id="submitMobile" className="mobile button-mobile" value="Send" onClick={(e) => this.props.inThread ? this.createPost(e) : this.createThread(e)} />
                 </div>
             </form>
         );

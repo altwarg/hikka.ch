@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 using Imageboard.Backend.DTO;
 using Imageboard.Backend.Services;
@@ -16,17 +17,36 @@ namespace Imageboard.Backend.Controllers {
         }
 
         [HttpPost("new")]
-        [ProducesResponseType(201)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         public IActionResult CreateThread([FromBody] NewThreadDTO data) {
-            return Created("", this.threadsService.CreateThread(data));
+            return Created(nameof(CreateThread), this.threadsService.CreateThread(data));
         }
 
-        [HttpGet("all/{abbr}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
-        public IActionResult GetThreads([FromRoute] string abbr) {
-            if (this.boardsService.HasBoard(abbr)) {
-                return Ok(this.threadsService.GetThreads(abbr));
+        [HttpPost("all")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetThreads([FromBody] GetThreadsDTO data) {
+            if (this.boardsService.BoardExists(data.Board)) {
+                return Ok(this.threadsService.GetThreads(data.Board, data.LastPostsLimit));
+            } else {
+                return NotFound();
+            }
+        }
+
+        [HttpGet("all")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IActionResult GetAllThreads() {
+            return Ok(this.threadsService.GetAllThreads());
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetThreadById([FromRoute] string id) {
+            var thread = this.threadsService.GetThread(id);
+
+            if (thread != null) {
+                return Ok(thread);
             } else {
                 return NotFound();
             }

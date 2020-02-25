@@ -2,20 +2,20 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import BoardsDescriptionControl from '../../Controls/BoardsDescriptionControl/BoardsDescriptionControl';
-import { BoardsInfo, Constants } from '../../../common';
+import { Board, Constants } from '../../../common';
 
-import './Home.scss';
+import './HomePage.scss';
 
 type Props = {
-    boardsInfo: BoardsInfo[];
+    links: Board[];
 }
 
-export default class Home extends React.Component<Props> {
+export default class HomePage extends React.Component<Props> {
     render() {
         return(
             <div id="content">
                 <div id="description">
-                    <BoardsDescriptionControl name={Constants.ImageboardName} />
+                    <BoardsDescriptionControl name={Constants.ImageboardName} abbr="/" />
                 </div>
 
                 <hr />
@@ -24,7 +24,7 @@ export default class Home extends React.Component<Props> {
                     <div className="full-width">
                         <h3 className="text-center">Boards</h3>
                         <ul id="homepage__boards-list" className="list-group">
-                            {this.props.boardsInfo.map((item, key) => {
+                            {this.props.links.map((item, key) => {
                                 return (
                                     <li className="list-group-item homepage__board borderless" key={key}>
                                         <strong>

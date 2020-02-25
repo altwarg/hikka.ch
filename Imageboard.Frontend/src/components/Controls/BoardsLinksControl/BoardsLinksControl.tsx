@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { BoardsInfo } from '../../../common';
+import { Board } from '../../../common';
 
 import './BoardsLinksControl.scss';
 
 type Props = {
-    boardsInfo: BoardsInfo[];
+    boardsInfo: Board[];
 }
 
 export default class BoardsLinksControl extends React.Component<Props> {
@@ -48,7 +48,7 @@ export default class BoardsLinksControl extends React.Component<Props> {
                 <strong>
                     {this.forRendering.map((item, key) => {
                         if (item !== '/') {
-                            return <Link to={item} className="board-navigation__link" key={key}>{item}</Link>;
+                            return <Link to={'/' + item} className="board-navigation__link" key={key}>{item}</Link>;
                         } else {
                             return <span key={key}> {item} </span>;
                         }

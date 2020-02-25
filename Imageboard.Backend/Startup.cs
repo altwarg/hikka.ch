@@ -23,8 +23,8 @@ namespace Imageboard.Backend {
 
             services.Configure<ImageboardDBSettings>(Configuration.GetSection(nameof(ImageboardDBSettings)));
             services.AddSingleton<IImageboardDBSettings>(x => x.GetRequiredService<IOptions<ImageboardDBSettings>>().Value);
-            services.AddSingleton<BoardsService>();
-            services.AddSingleton<ThreadsService>();
+            services.AddScoped<BoardsService>();
+            services.AddScoped<ThreadsService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {

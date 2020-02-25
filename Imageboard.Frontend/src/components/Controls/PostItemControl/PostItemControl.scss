@@ -1,10 +1,6 @@
-.post__anon {
-    cursor: pointer;
+.post__time, .post__anon, .post__id {
     margin-right: 5px;
-}
-
-.post__time {
-    margin-right: 5px;
+    color: #5d5d5d;
 }
 
 .post__id-reply {
@@ -14,6 +10,13 @@
     &:hover {
         color: #3d54c3;
     }
+}
+
+.post__title {
+    color: #004a99;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-right: 5px;
 }
 
 .post__details {
