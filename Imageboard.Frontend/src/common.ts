@@ -36,3 +36,8 @@ export interface NewPostDTO {
     Name: string;
     Message: string;
 }
+
+export interface GetThreadsDTO {
+    Board: string;
+    LastPostsLimit: number;
+}

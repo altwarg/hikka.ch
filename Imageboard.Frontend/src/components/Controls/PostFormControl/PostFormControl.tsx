@@ -63,7 +63,7 @@ export default class PostFormControl extends React.Component<Props, State> {
         } as NewPostDTO;
 
         // Attempt to create new post
-        HttpHelper.createNewPost(dto, dto.Thread).then((res) => {
+        HttpHelper.createNewPost(dto).then((res) => {
             window.location.reload();
         }).catch((err: AxiosError) => {
             if (err.message === "Network Error") {

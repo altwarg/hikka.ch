@@ -24,11 +24,11 @@ namespace Imageboard.Backend.Services {
             return this.threads.Find(x => x.Board == abbr).ToList();
         }
 
-        public List<Thread> GetThreads(string abbr, int limit) {
+        public List<Thread> GetThreads(string abbr, int lastPostsLimit) {
             var threads = this.threads.Find(x => x.Board == abbr).ToList();
             foreach (var thread in threads) {
                 var opPost = thread.Posts[0];
-                var posts = thread.Posts.TakeLast(limit).ToList();
+                var posts = thread.Posts.TakeLast(lastPostsLimit).ToList();
 
                 if (!posts.Contains(opPost)) {
                     posts.Insert(0, opPost);

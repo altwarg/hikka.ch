@@ -8,6 +8,7 @@ import HttpHelper from '../httpHelper';
 import { Board, Constants, Thread } from '../common';
 
 import './App.scss';
+import ThreadPage from './Pages/ThreadPage/ThreadPage';
 
 type State = {
     boardsLoaded: boolean;
@@ -87,7 +88,7 @@ export default class App extends React.Component<{}, State> {
 
                             {/* Mapping the threads routes */}
                             {this.threads.map((item, key) => {
-                                return <Route path={'/' + item.Board + '/' + item.Id} exact render={() => <BoardPage name={this.currentPageName} abbr={this.currentPageAbbr} links={this.boards} inThread={true} /> } key={key} />
+                                return <Route path={'/' + item.Board + '/' + item.Id} exact render={() => <ThreadPage thread={item.Id} name={this.currentPageName} abbr={this.currentPageAbbr} links={this.boards} inThread={true} /> } key={key} />
                             })}
 
                             {/* Other routes (404) */}

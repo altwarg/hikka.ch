@@ -4,9 +4,9 @@ import { AxiosError } from 'axios';
 import BoardsLinksControl from '../../Controls/BoardsLinksControl/BoardsLinksControl';
 import BoardsDescriptionControl from '../../Controls/BoardsDescriptionControl/BoardsDescriptionControl';
 import PostFormControl from '../../Controls/PostFormControl/PostFormControl';
-import ThreadPage from '../ThreadPage/ThreadPage';
+import ThreadItemControl from '../../Controls/ThreadItemControl/ThreadItemControl';
 import HttpHelper from '../../../httpHelper';
-import { Board, Thread } from '../../../common';
+import { Board, Thread, GetThreadsDTO } from '../../../common';
 
 import './BoardPage.scss';
 
@@ -45,7 +45,12 @@ export default class BoardPage extends React.Component<Props, State> {
                 }
             });
         } else {
-            HttpHelper.getBoardThreads(this.props.abbr).then((res) => {
+            let dto = {
+                Board: this.props.abbr,
+                LastPostsLimit: 3
+            } as GetThreadsDTO;
+
+            HttpHelper.getBoardThreads(dto).then((res) => {
                 this.threads = res.data;
                 this.setState({ loaded: true });
             }).catch((err: AxiosError) => {
@@ -60,7 +65,7 @@ export default class BoardPage extends React.Component<Props, State> {
         if (this.state.noConnection) {
             return (<div>No connection with backend</div>);
         } else if (!this.state.loaded) {
-            return(<div />);
+            return (<div />);
         } else {
             return (
                 <div id="content">
@@ -97,7 +102,7 @@ export default class BoardPage extends React.Component<Props, State> {
                     <div id="content">
                         {this.threads.map((item, key) => {
                             return (
-                                <ThreadPage thread={item} inThread={this.props.inThread} key={key} />
+                                <ThreadItemControl thread={item} inThread={this.props.inThread} key={key} />
                             )
                         })}
                     </div>
