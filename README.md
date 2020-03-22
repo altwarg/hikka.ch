@@ -5,3 +5,16 @@ For an imageboard i've used:
 - ASP.NET Core 3.1 for backend;
 - React with Typescript for frontend;
 - MongoDB for storage.
+
+# Features
+- [] Posts attachments: [in progress]
+    * Audio
+    * Video
+    * Pictures
+- [] Thumbnail generation
+- [x] BBCode markup support [in progress]
+- [] SAGE support
+- [] Captcha
+- [] Search
+- [] API
+- [] Docker-image
