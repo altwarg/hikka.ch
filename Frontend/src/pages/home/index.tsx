@@ -1,22 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import BoardsDescriptionControl from '../../Controls/BoardsDescriptionControl/BoardsDescriptionControl';
-import { Board, Constants } from '../../../common';
+import { BoardsDescription } from '../../components'
+import { Board, Constants } from '../../utils/common';
 
-import './HomePage.scss';
+import './styles.scss';
 
 type Props = {
     links: Board[];
 }
 
-export default class HomePage extends React.Component<Props> {
+export class HomePage extends React.Component<Props> {
     render() {
         return(
-            <div id="content">
-                <div id="description">
-                    <BoardsDescriptionControl name={Constants.ImageboardName} abbr="/" />
-                </div>
+            <>
+                <BoardsDescription name={Constants.ImageboardName} abbr="/" />
 
                 <hr />
 
@@ -36,7 +34,7 @@ export default class HomePage extends React.Component<Props> {
                         </ul>
                     </div>
                 </div>
-            </div>
+            </>
         );
     }
 }

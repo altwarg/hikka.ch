@@ -1,21 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { Post } from '../../../common';
+import { Post as Info } from '../../utils/common';
 
-import './PostItemControl.scss';
+import './styles.scss';
 
 import parser from 'bbcode-to-react';
 
 type Props = {
-    info: Post;
+    info: Info;
     title: string;
     board: string;
     id: string;
     inThread: boolean;
 }
 
-export default class PostItemControl extends React.Component<Props> {
+export class Post extends React.Component<Props> {
     render() {
         return (
             <div className={this.props.info.No === 1 ? "post__op post__container" : "post__reply post__container"}>

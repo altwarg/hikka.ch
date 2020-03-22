@@ -1,14 +1,14 @@
 export class Constants {
     public static ImageboardName: string = 'hikka.ch';
-    public static BackendURL: string = 'https://localhost:51621/api';
+    public static BackendUrl: string = 'https://localhost:51621/api';
 }
 
-export interface Board {
+export type Board = {
     Abbr: string;
     Name: string;
 }
 
-export interface Thread {
+export type Thread = {
     Id: string;
     Title: string;
     Board: string;
@@ -16,7 +16,7 @@ export interface Thread {
     Posts: Post[];
 }
 
-export interface Post {
+export type Post = {
     Id: string;
     Name: string;
     DateTime: string;
@@ -24,20 +24,20 @@ export interface Post {
     No: number;
 }
 
-export interface NewThreadDTO {
+export type NewThreadDTO = {
     Title: string;
     Board: string;
     Name: string;
     Message: string;
 }
 
-export interface NewPostDTO {
+export type NewPostDTO = {
     Thread: string;
     Name: string;
     Message: string;
 }
 
-export interface GetThreadsDTO {
+export type GetThreadsDTO = {
     Board: string;
     LastPostsLimit: number;
 }

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { Constants } from '../../../common';
+import { Constants } from '../../utils/common';
 
-import './NotFoundPage.scss';
+import './styles.scss';
 
-export default class NotFoundPage extends React.Component {
+export class NotFoundPage extends React.Component {
     // Here just add additional pics or gifs
     private images: string[] = [ "/404/404_1.jpg", "/404/404_2.gif", "/404/404_3.png", "/404/404_4.jpg", "/404/404_5.png" ];
 
@@ -19,7 +19,7 @@ export default class NotFoundPage extends React.Component {
 
     render() {
         return (
-            <div id="content">
+            <>
                 <div id="logo">
                     <h1 className="text-center">
                         <span><Link to="/" className="link">{Constants.ImageboardName}</Link></span>
@@ -37,7 +37,7 @@ export default class NotFoundPage extends React.Component {
                         Not found
                     </div>
                 </div>
-            </div>
+            </>
         );
     }
 }

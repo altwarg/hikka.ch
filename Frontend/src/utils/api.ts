@@ -2,13 +2,13 @@ import axios from 'axios';
 import { Constants, Board, Thread, NewThreadDTO, NewPostDTO, GetThreadsDTO } from './common';
 
 const http = axios.create({
-    baseURL: Constants.BackendURL,
+    baseURL: Constants.BackendUrl,
     headers: {
         'Content-Type': 'application/json; charset=utf-8',
     }
 })
 
-export default class HttpHelper {
+export default class Api {
     public static async getBoards() {
         return await http.get<Board[]>('/boards/all');
     }

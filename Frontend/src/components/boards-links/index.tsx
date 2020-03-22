@@ -1,15 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { Board } from '../../../common';
+import { Board } from '../../utils/common';
 
-import './BoardsLinksControl.scss';
+import './styles.scss';
 
 type Props = {
     boardsInfo: Board[];
 }
 
-export default class BoardsLinksControl extends React.Component<Props> {
+export class BoardsLinks extends React.Component<Props> {
     private forRendering: string[];
 
     constructor(props: Props) {

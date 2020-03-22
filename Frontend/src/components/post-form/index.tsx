@@ -1,10 +1,10 @@
 import React from 'react';
 import { AxiosError } from 'axios';
 
-import { NewThreadDTO, NewPostDTO } from '../../../common';
-import HttpHelper from '../../../httpHelper';
+import { NewThreadDTO, NewPostDTO } from '../../utils/common';
+import Api from '../../utils/api';
 
-import './PostFormControl.scss';
+import './styles.scss';
 
 type Props = {
     abbr: string;
@@ -18,7 +18,7 @@ type State = {
     comment: string;
 }
 
-export default class PostFormControl extends React.Component<Props, State> {
+export class PostForm extends React.Component<Props, State> {
     constructor(props: any) {
         super(props);
 
@@ -36,15 +36,15 @@ export default class PostFormControl extends React.Component<Props, State> {
 
     private createThread(e: React.MouseEvent) {
         e.preventDefault();
-        let dto = {
+        let dto: NewThreadDTO = {
             Board: this.props.abbr,
             Name: this.state.name,
             Title: this.state.subject,
             Message: this.state.comment
-        } as NewThreadDTO;
+        };
 
         // Attempt to create new thread
-        HttpHelper.createNewThread(dto).then((res) => {
+        Api.createNewThread(dto).then((res) => {
             window.location.reload();
             window.location.href = `/${res.data.Board}/${res.data.Id}`;
         }).catch((err: AxiosError) => {
@@ -56,14 +56,14 @@ export default class PostFormControl extends React.Component<Props, State> {
 
     private createPost(e: React.MouseEvent) {
         e.preventDefault();
-        let dto = {
+        let dto: NewPostDTO = {
             Name: this.state.name,
             Message: this.state.comment,
             Thread: window.location.pathname.substr(1).split('/')[1]
-        } as NewPostDTO;
+        };
 
         // Attempt to create new post
-        HttpHelper.createNewPost(dto).then((res) => {
+        Api.createNewPost(dto).then((res) => {
             window.location.reload();
         }).catch((err: AxiosError) => {
             if (err.message === "Network Error") {

@@ -6,6 +6,10 @@ body {
     line-height: 1.4;
     color: #333;
     background-color: #eee;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas: "." "." ".";
+    grid-auto-rows: minmax(min-content, max-content);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -66,13 +70,6 @@ a.list-group-item {
         text-decoration: none;
         background-color: #f5f5f5;
     }
-}
-
-#app {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-areas: "." "." ".";
-    grid-auto-rows: minmax(min-content, max-content);
 }
 
 .row {

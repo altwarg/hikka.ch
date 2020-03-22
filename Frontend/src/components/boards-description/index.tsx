@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 
-import { Constants } from '../../../common';
+import { Constants } from '../../utils/common';
 import { Link } from 'react-router-dom';
 
 type Props = {
@@ -8,7 +8,7 @@ type Props = {
     abbr: string;
 }
 
-export default class BoardsDescriptionControl extends React.Component<Props> {
+export class BoardsDescription extends React.Component<Props> {
     // Changing the <title> contents when changing the board
     componentDidMount() {
         if (this.props.name !== '' && this.props.name !== Constants.ImageboardName) {
