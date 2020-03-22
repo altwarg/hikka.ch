@@ -5,6 +5,8 @@ import { Post } from '../../../common';
 
 import './PostItemControl.scss';
 
+import parser from 'bbcode-to-react';
+
 type Props = {
     info: Post;
     title: string;
@@ -43,7 +45,7 @@ export default class PostItemControl extends React.Component<Props> {
                     )} */}
                 </div>
                 <article className="post__message">
-                    {this.props.info.Message}
+                    {parser.toReact(this.props.info.Message)}
                 </article>
             </div>
         );
