@@ -18,4 +18,4 @@ export const Thread: React.FC<Props> = ({ threadInfo, inThread }) => (
             </div>
         ))}
     </div>
-)
+);

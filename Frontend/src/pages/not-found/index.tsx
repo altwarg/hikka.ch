@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-import { Constants } from '../../utils/common';
+import { ImageboardName } from '../../utils/common';
 
 import './styles.scss';
 
@@ -19,7 +19,7 @@ export const NotFoundPage: React.FC = () => {
         <>
             <div id="logo">
                 <h1 className="text-center">
-                    <span><Link to="/" className="link">{Constants.ImageboardName}</Link></span>
+                    <span><Link to="/" className="link">{ImageboardName}</Link></span>
                 </h1>
             </div>
             <div className="box">

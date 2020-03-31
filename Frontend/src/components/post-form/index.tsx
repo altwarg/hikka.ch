@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { AxiosError } from 'axios';
 
-import { NewThreadDTO, NewPostDTO } from '../../utils/common';
-import Api from '../../utils/api';
+import { Thread } from '../../utils/common';
+import { post } from '../../utils/api';
 
 import './styles.scss';
 
@@ -19,7 +18,7 @@ export const PostForm: React.FC<Props> = ({ abbr, inThread }) => {
 
     const createThread = (e: React.MouseEvent) => {
         e.preventDefault();
-        let dto: NewThreadDTO = {
+        let dto = {
             Board: abbr,
             Name: name,
             Title: subject,
@@ -27,34 +26,26 @@ export const PostForm: React.FC<Props> = ({ abbr, inThread }) => {
         };
 
         // Attempt to create new thread
-        Api.createNewThread(dto).then((res) => {
-            window.location.reload();
-            window.location.href = `/${res.data.Board}/${res.data.Id}`;
-        }).catch((err: AxiosError) => {
-            if (err.message === "Network Error") {
-                console.log(err.message);
-            }
-        });
+        post<Thread>('threads/new', dto)
+            .then((data) => {
+                window.location.reload();
+                window.location.href = `/${data.Board}/${data.Id}`;
+            })
+            .catch((err) => console.error(err));
     }
 
     const createPost = (e: React.MouseEvent) => {
         e.preventDefault();
-        let dto: NewPostDTO = {
+        let dto = {
             Name: name,
             Message: comment,
-            Thread: window.location.pathname.substr(1).split('/')[1]
+            Thread: window.location.pathname.substr(1).split('/')[1],
         };
 
         // Attempt to create new post
-        Api.createNewPost(dto).then((res) => {
-            window.location.reload();
-        }).catch((err: AxiosError) => {
-            if (err.message === "Network Error") {
-                console.log(err.message);
-            } else if (err.response?.status === 404) {
-                console.log("Thread does not exist");
-            }
-        })
+        post('posts/new', dto)
+            .then(() => window.location.reload())
+            .catch((err) => console.error(err));
     }
 
     return (

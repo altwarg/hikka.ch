@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { AxiosError } from 'axios';
 
 import { Thread as ThreadItem, PostForm, BoardsDescription, BoardsLinks } from '../../components';
-import Api from '../../utils/api';
 import { Thread, Board } from '../../utils/common';
+import { get } from '../../utils/api';
 
 import './styles.scss';
 
@@ -12,24 +11,19 @@ type Props = {
     inThread: boolean;
     name: string;
     abbr: string;
-    thread: string;
+    id: string;
 }
 
-export const ThreadPage: React.FC<Props> = ({ links, inThread, name, abbr, thread }) => {
+export const ThreadPage: React.FC<Props> = ({ links, inThread, name, abbr, id }) => {
     const [loaded, setLoaded] = useState(false);
     const [show, setShow] = useState(false);
     const [noConnection, setNoConnection] = useState(false);
     const [fetched, setFetched] = useState<Thread | null>(null);
 
     useEffect(() => {
-        Api.getThreadById(thread).then((res) => {
-            setFetched(res.data);
-            setLoaded(true);
-        }).catch((err: AxiosError) => {
-            if (err.message === "NetworkError") {
-                setNoConnection(true);
-            }
-        });
+        get<Thread>(`threads/${id}`)
+            .then((data) => { setFetched(data); setLoaded(true); })
+            .catch((err) => setNoConnection(true));
     }, []);
 
     return !noConnection && loaded ? (

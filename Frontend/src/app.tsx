@@ -3,8 +3,8 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 
 import { ThreadPage, BoardPage, NotFoundPage, HomePage } from './pages';
-import Api from './utils/api';
-import { Board, Constants, Thread } from './utils/common';
+import { Board, Thread, ImageboardName } from './utils/common';
+import { get } from './utils/api';
 
 import './styles.scss';
 
@@ -23,7 +23,7 @@ export const App: React.FC = () => {
         let result: Board = boards.filter(board => board.Abbr === document.location.pathname.substr(1).split('/')[0])[0];
 
         if (document.location.pathname === '/' && !result) {
-            return Constants.ImageboardName;
+            return ImageboardName;
         }
 
         return result.Name;
@@ -39,20 +39,14 @@ export const App: React.FC = () => {
 
     useEffect(() => {
         // Fetching boards info from backend
-        Api.getBoards().then((res) => {
-            setBoards(res.data);
-            setBoardsLoaded(true);
-        }).catch(() => {
-            setNoConnection(true);
-        });
+        get<Board[]>('boards/all')
+            .then((data) => { setBoards(data); setBoardsLoaded(true); })
+            .catch((err) => setNoConnection(true));
 
         // Fetching threads info from backend and updating routes
-        Api.getAllThreads().then((res) => {
-            setThreads(res.data);
-            setThreadsLoaded(true);
-        }).catch((err: Error) => {
-            setNoConnection(true);
-        });
+        get<Thread[]>('threads/all')
+            .then((data) => { setThreads(data); setThreadsLoaded(true); })
+            .catch((err) => setNoConnection(true));
     }, []);
 
     return !noConnection && boardsLoaded && threadsLoaded ? (
@@ -69,7 +63,7 @@ export const App: React.FC = () => {
 
                     {/* Mapping the threads routes */}
                     {threads.map((item, key) => (
-                        <Route path={'/' + item.Board + '/' + item.Id} exact render={() => <ThreadPage thread={item.Id} name={currentPageName()} abbr={currentPageAbbr()} links={boards} inThread={true} />} key={key} />
+                        <Route path={'/' + item.Board + '/' + item.Id} exact render={() => <ThreadPage id={item.Id} name={currentPageName()} abbr={currentPageAbbr()} links={boards} inThread={true} />} key={key} />
                     ))}
 
                     {/* Other routes (404) */}

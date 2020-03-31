@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { AxiosError } from 'axios';
 
 import { Thread, PostForm, BoardsDescription, BoardsLinks } from '../../components';
-import Api from '../../utils/api';
-import { Board, Thread as ThreadInfo, GetThreadsDTO } from '../../utils/common';
+import { Board, Thread as ThreadInfo } from '../../utils/common';
+import { get, post } from '../../utils/api';
 
 import './styles.scss';
 
@@ -24,28 +23,19 @@ export const BoardPage: React.FC<Props> = ({ links, inThread, name, abbr }) => {
         if (inThread === true) {
             // We've opened thread
             let id: string = document.location.pathname.substr(1).split('/')[1];
-            Api.getThreadById(id).then((res) => {
-                setThreads([res.data]);
-                setLoaded(true);
-            }).catch((err: AxiosError) => {
-                if (err.message === "Network Error") {
-                    setNoConnection(true);
-                }
-            });
+
+            get<ThreadInfo>(`threads/${id}`)
+                .then((data) => { setThreads([ data ]); setLoaded(true); })
+                .catch((err) => setNoConnection(true));
         } else {
-            let dto: GetThreadsDTO = {
+            let dto = {
                 Board: abbr,
                 LastPostsLimit: 3
             };
 
-            Api.getBoardThreads(dto).then((res) => {
-                setThreads(res.data);
-                setLoaded(true);
-            }).catch((err: AxiosError) => {
-                if (err.message === "Network Error") {
-                    setNoConnection(true);
-                }
-            });
+            post<ThreadInfo[]>('threads/all', dto)
+                .then((data) => { setThreads(data); setLoaded(true); })
+                .catch((err) => setNoConnection(true));
         }
     }, []);
 
