@@ -1,75 +1,29 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { Board } from '../../utils/common';
-
 import './styles.scss';
 
 type Props = {
-    boardsInfo: Board[];
+    links: string[];
 }
 
-export class BoardsLinks extends React.Component<Props> {
-    private forRendering: string[];
+export const BoardsLinks: React.FC<Props> = ({ links }) => (
+    <nav id="board-navigation" className="borderless">
+        <strong>
+            [&nbsp; {links.map((item, key) => (
+            <>
+                <Link to={'/' + item} className="board-navigation__link" key={key}>{item}</Link>
+                {key !== links.length - 1 && (
+                    <span> / </span>
+                )}
+            </>
+            ))} &nbsp;]
+        </strong>
 
-    constructor(props: Props) {
-        super(props);
-        this.forRendering = [];
-    }
+        &nbsp;
 
-    private intersperce(arr: string[], el: string): string[] {
-        let result: string[] = [];
-        let i: number = 0;
-
-        if (i < arr.length) {
-            result.push(arr[i++]);
-        }
-
-        while (i < arr.length) {
-            result.push(el, arr[i++]);
-        }
-
-        return result;
-    }
-
-    componentDidMount() {
-        if (this.props.boardsInfo !== []) {
-            this.forRendering = this.intersperce(this.props.boardsInfo.map(item => item.Abbr), '/');
-            this.setState({ fetchedInfo: this.props.boardsInfo });
-        }
-    }
-
-    render() {
-        return(
-            <nav id="board-navigation" className="borderless">
-                <strong>
-                    [ &nbsp;
-                </strong>
-                <strong>
-                    {this.forRendering.map((item, key) => {
-                        if (item !== '/') {
-                            return <Link to={'/' + item} className="board-navigation__link" key={key}>{item}</Link>;
-                        } else {
-                            return <span key={key}> {item} </span>;
-                        }
-                    })}
-                </strong>
-                <strong>
-                    &nbsp; ]
-                </strong>
-
-                &nbsp;
-
-                <strong>
-                    [ &nbsp;
-                </strong>
-                <strong>
-                    <Link to="/" className="board-navigation__link">Home</Link>
-                </strong>
-                <strong>
-                    &nbsp; ]
-                </strong>
-            </nav>
-        );
-    }
-}
+        <strong>
+            [&nbsp; <Link to="/" className="board-navigation__link">Home</Link> &nbsp;]
+        </strong>
+    </nav>
+);

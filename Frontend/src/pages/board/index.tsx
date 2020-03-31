@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { AxiosError } from 'axios';
 
 import { Thread, PostForm, BoardsDescription, BoardsLinks } from '../../components';
@@ -14,85 +14,69 @@ type Props = {
     abbr: string;
 }
 
-type State = {
-    loaded: boolean;
-    showForm: boolean;
-    noConnection: boolean;
-}
+export const BoardPage: React.FC<Props> = ({ links, inThread, name, abbr }) => {
+    const [loaded, setLoaded] = useState(false);
+    const [show, setShow] = useState(false);
+    const [noConnection, setNoConnection] = useState(false);
+    const [threads, setThreads] = useState<ThreadInfo[]>([]);
 
-export class BoardPage extends React.Component<Props, State> {
-    private threads: ThreadInfo[];
-
-    constructor(props: Props) {
-        super(props);
-
-        this.threads = [];
-        this.state = { loaded: false, showForm: false, noConnection: false };
-
-        if (this.props.inThread === true) {
+    useEffect(() => {
+        if (inThread === true) {
             // We've opened thread
             let id: string = document.location.pathname.substr(1).split('/')[1];
             Api.getThreadById(id).then((res) => {
-                this.threads.push(res.data);
-                this.setState({ loaded: true });
+                setThreads([res.data]);
+                setLoaded(true);
             }).catch((err: AxiosError) => {
                 if (err.message === "Network Error") {
-                    this.setState({ noConnection: true });
+                    setNoConnection(true);
                 }
             });
         } else {
             let dto: GetThreadsDTO = {
-                Board: this.props.abbr,
+                Board: abbr,
                 LastPostsLimit: 3
             };
 
             Api.getBoardThreads(dto).then((res) => {
-                this.threads = res.data;
-                this.setState({ loaded: true });
+                setThreads(res.data);
+                setLoaded(true);
             }).catch((err: AxiosError) => {
                 if (err.message === "Network Error") {
-                    this.setState({ noConnection: true });
+                    setNoConnection(true);
                 }
             });
         }
-    }
+    }, []);
 
-    render() {
-        if (this.state.noConnection) {
-            return (<div>No connection with backend</div>);
-        } else if (!this.state.loaded) {
-            return (<div />);
-        } else {
-            return (
-                <>
-                    <BoardsLinks boardsInfo={this.props.links} />
-                    <BoardsDescription name={this.props.name} abbr={this.props.abbr} />
+    return !noConnection && loaded ? (
+        <>
+            <BoardsLinks links={links.map(item => item.Abbr)} />
+            <BoardsDescription name={name} abbr={abbr} />
 
-                    <div className="clickable-link__container">
-                        {this.state.showForm && (
-                            <span className="clickable-link" onClick={() => this.setState({ showForm: false })}>
-                                Close posting form
-                            </span>
-                        )}
+            <div className="clickable-link__container">
+                {show && (
+                    <span className="clickable-link" onClick={() => setShow(false)}>
+                        Close posting form
+                    </span>
+                )}
 
-                        {!this.state.showForm && (
-                            <span className="clickable-link" onClick={() => this.setState({ showForm: true })}>
-                                Open posting form
-                            </span>
-                        )}
-                    </div>
+                {!show && (
+                    <span className="clickable-link" onClick={() => setShow(true)}>
+                        Open posting form
+                    </span>
+                )}
+            </div>
 
-                    {this.state.showForm && (
-                        <PostForm abbr={this.props.abbr} inThread={this.props.inThread} />
-                    )}
+            {show && (
+                <PostForm abbr={abbr} inThread={inThread} />
+            )}
 
-                    <hr />
+            <hr />
 
-                    {this.threads.map((item, key) => (
-                        <Thread threadInfo={item} inThread={this.props.inThread} key={key} />
-                    ))}
-                </>
-            );
-        }
-    }
+            {threads.map((item, key) => (
+                <Thread threadInfo={item} inThread={inThread} key={key} />
+            ))}
+        </>
+    ) : <div />;
 }

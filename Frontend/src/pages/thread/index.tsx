@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { AxiosError } from 'axios';
 
 import { Thread as ThreadItem, PostForm, BoardsDescription, BoardsLinks } from '../../components';
@@ -15,66 +15,49 @@ type Props = {
     thread: string;
 }
 
-type State = {
-    loaded: boolean;
-    showForm: boolean;
-    noConnection: boolean;
-}
+export const ThreadPage: React.FC<Props> = ({ links, inThread, name, abbr, thread }) => {
+    const [loaded, setLoaded] = useState(false);
+    const [show, setShow] = useState(false);
+    const [noConnection, setNoConnection] = useState(false);
+    const [fetched, setFetched] = useState<Thread | null>(null);
 
-export class ThreadPage extends React.Component<Props, State> {
-    private thread: Thread | null;
-
-    constructor(props: Props) {
-        super(props);
-
-        this.thread = null;
-        this.state = { loaded: false, showForm: false, noConnection: false };
-
-        Api.getThreadById(this.props.thread).then((res) => {
-            this.thread = res.data;
-            this.setState({ loaded: true });
+    useEffect(() => {
+        Api.getThreadById(thread).then((res) => {
+            setFetched(res.data);
+            setLoaded(true);
         }).catch((err: AxiosError) => {
             if (err.message === "NetworkError") {
-                this.setState({ noConnection: true });
+                setNoConnection(true);
             }
         });
-    }
+    }, []);
 
-    render() {
-        if (this.state.noConnection) {
-            return (<div>No connection with backend</div>);
-        } else if (!this.state.loaded) {
-            return (<div />);
-        } else {
-            return (
-                <>
-                    <BoardsLinks boardsInfo={this.props.links} />
+    return !noConnection && loaded ? (
+        <>
+            <BoardsLinks links={links.map(item => item.Abbr)} />
+            <BoardsDescription name={name} abbr={abbr} />
 
-                    <BoardsDescription name={this.props.name} abbr={this.props.abbr} />
+            <div className="clickable-link__container">
+                {show && (
+                    <span className="clickable-link" onClick={() => setShow(false)}>
+                        Close posting form
+                    </span>
+                )}
 
-                    <div className="clickable-link__container">
-                        {this.state.showForm && (
-                            <span className="clickable-link" onClick={() => this.setState({ showForm: false })}>
-                                Close posting form
-                            </span>
-                        )}
+                {!show && (
+                    <span className="clickable-link" onClick={() => setShow(true)}>
+                        Open posting form
+                    </span>
+                )}
+            </div>
 
-                        {!this.state.showForm && (
-                            <span className="clickable-link" onClick={() => this.setState({ showForm: true })}>
-                                Open posting form
-                            </span>
-                        )}
-                    </div>
+            {show && (
+                <PostForm abbr={abbr} inThread={inThread} />
+            )}
 
-                    {this.state.showForm && (
-                        <PostForm abbr={this.props.abbr} inThread={this.props.inThread} />
-                    )}
+            <hr />
 
-                    <hr />
-
-                    <ThreadItem threadInfo={this.thread} inThread={this.props.inThread} />
-                </>
-            );
-        }
-    }
+            <ThreadItem threadInfo={fetched} inThread={inThread} />
+        </>
+    ) : <div />;
 }
