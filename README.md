@@ -7,14 +7,14 @@ For an imageboard i've used:
 - MongoDB for storage.
 
 # Features
-- [] Posts attachments: [in progress]
+- [ ] Posts attachments: [in progress]
     * Audio
     * Video
     * Pictures
-- [] Thumbnail generation
+- [ ] Thumbnail generation
 - [x] BBCode markup support [in progress]
-- [] SAGE support
-- [] Captcha
-- [] Search
-- [] API
-- [] Docker-image
+- [ ] SAGE support
+- [ ] Captcha
+- [ ] Search
+- [ ] API
+- [ ] Docker-image
