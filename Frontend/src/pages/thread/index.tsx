@@ -24,7 +24,7 @@ export const ThreadPage: React.FC<Props> = ({ links, inThread, name, abbr, id })
         get<Thread>(`threads/${id}`)
             .then((data) => { setFetched(data); setLoaded(true); })
             .catch((err) => setNoConnection(true));
-    }, []);
+    }, [id, abbr]);
 
     return !noConnection && loaded ? (
         <>

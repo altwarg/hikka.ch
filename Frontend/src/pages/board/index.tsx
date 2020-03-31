@@ -20,7 +20,7 @@ export const BoardPage: React.FC<Props> = ({ links, inThread, name, abbr }) => {
     const [threads, setThreads] = useState<ThreadInfo[]>([]);
 
     useEffect(() => {
-        if (inThread === true) {
+        if (inThread) {
             // We've opened thread
             let id: string = document.location.pathname.substr(1).split('/')[1];
 
@@ -37,7 +37,7 @@ export const BoardPage: React.FC<Props> = ({ links, inThread, name, abbr }) => {
                 .then((data) => { setThreads(data); setLoaded(true); })
                 .catch((err) => setNoConnection(true));
         }
-    }, []);
+    }, [abbr, inThread]);
 
     return !noConnection && loaded ? (
         <>
