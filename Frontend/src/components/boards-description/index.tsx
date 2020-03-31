@@ -5,10 +5,10 @@ import { ImageboardName } from '../../utils/common';
 import { Link } from 'react-router-dom';
 import { Emoji } from '../emoji';
 
-type Props = {
+type Props = Readonly<{
     name: string;
     abbr: string;
-}
+}>;
 
 export const BoardsDescription: React.FC<Props> = ({ name, abbr }) => (
     <>

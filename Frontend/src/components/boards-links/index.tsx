@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 
 import './styles.scss';
 
-type Props = {
+type Props = Readonly<{
     links: string[];
-}
+}>;
 
 export const BoardsLinks: React.FC<Props> = ({ links }) => (
     <nav id="board-navigation" className="borderless">

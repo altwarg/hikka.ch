@@ -2,13 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { BoardsDescription } from '../../components'
-import { Board, ImageboardName } from '../../utils/common';
+import { Boards, ImageboardName } from '../../utils/common';
 
 import './styles.scss';
 
-type Props = {
-    links: Board[];
-}
+type Props = Readonly<{
+    links: Boards;
+}>;
 
 export const HomePage: React.FC<Props> = ({ links }) => (
     <>

@@ -7,13 +7,13 @@ import './styles.scss';
 
 import parser from 'bbcode-to-react';
 
-type Props = {
+type Props = Readonly<{
     info: Info;
     title: string;
     board: string;
     id: string;
     inThread: boolean;
-}
+}>;
 
 export const Post: React.FC<Props> = ({ info, title, board, id, inThread }) => (
     <div className={info.No === 1 ? "post__op post__container" : "post__reply post__container"}>

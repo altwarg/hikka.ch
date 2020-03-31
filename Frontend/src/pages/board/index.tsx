@@ -1,71 +1,37 @@
 import React, { useState, useEffect } from 'react';
 
-import { Thread, PostForm, BoardsDescription, BoardsLinks } from '../../components';
-import { Board, Thread as ThreadInfo } from '../../utils/common';
-import { get, post } from '../../utils/api';
+import { Thread, PageTopbar } from '../../components';
+import { Boards, Threads } from '../../utils/common';
+import { post } from '../../utils/api';
 
-import './styles.scss';
-
-type Props = {
-    links: Board[];
-    inThread: boolean;
+type Props = Readonly<{
+    links: Boards;
     name: string;
     abbr: string;
-}
+}>;
 
-export const BoardPage: React.FC<Props> = ({ links, inThread, name, abbr }) => {
-    const [loaded, setLoaded] = useState(false);
-    const [show, setShow] = useState(false);
-    const [noConnection, setNoConnection] = useState(false);
-    const [threads, setThreads] = useState<ThreadInfo[]>([]);
+export const BoardPage: React.FC<Props> = ({ links, name, abbr }) => {
+    const [fetched, setFetched] = useState<Threads | null>(null);
 
     useEffect(() => {
-        if (inThread) {
-            // We've opened thread
-            let id: string = document.location.pathname.substr(1).split('/')[1];
+        let dto = {
+            Board: abbr,
+            LastPostsLimit: 3
+        };
 
-            get<ThreadInfo>(`threads/${id}`)
-                .then((data) => { setThreads([ data ]); setLoaded(true); })
-                .catch((err) => setNoConnection(true));
-        } else {
-            let dto = {
-                Board: abbr,
-                LastPostsLimit: 3
-            };
+        post<Threads>('threads/all', dto)
+            .then((data) => setFetched(data))
+            .catch((err) => console.error(err));
+    }, [abbr]);
 
-            post<ThreadInfo[]>('threads/all', dto)
-                .then((data) => { setThreads(data); setLoaded(true); })
-                .catch((err) => setNoConnection(true));
-        }
-    }, [abbr, inThread]);
-
-    return !noConnection && loaded ? (
+    return fetched ? (
         <>
-            <BoardsLinks links={links.map(item => item.Abbr)} />
-            <BoardsDescription name={name} abbr={abbr} />
-
-            <div className="clickable-link__container">
-                {show && (
-                    <span className="clickable-link" onClick={() => setShow(false)}>
-                        Close posting form
-                    </span>
-                )}
-
-                {!show && (
-                    <span className="clickable-link" onClick={() => setShow(true)}>
-                        Open posting form
-                    </span>
-                )}
-            </div>
-
-            {show && (
-                <PostForm abbr={abbr} inThread={inThread} />
-            )}
+            <PageTopbar abbr={abbr} inThread={false} links={links} name={name} />
 
             <hr />
 
-            {threads.map((item, key) => (
-                <Thread threadInfo={item} inThread={inThread} key={key} />
+            {fetched.map((item, key) => (
+                <Thread info={item} inThread={false} key={key} />
             ))}
         </>
     ) : <div />;

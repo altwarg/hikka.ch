@@ -5,10 +5,10 @@ import { post } from '../../utils/api';
 
 import './styles.scss';
 
-type Props = {
+type Props = Readonly<{
     abbr: string;
     inThread: boolean;
-}
+}>;
 
 export const PostForm: React.FC<Props> = ({ abbr, inThread }) => {
     const [charsLeft, setCharsLeft] = useState(15000);
