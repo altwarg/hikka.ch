@@ -6,9 +6,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Imageboard.Backend/bin/Debug/netcoreapp3.1/Imageboard.Backend.dll",
+            "program": "${workspaceFolder}/Backend/bin/Debug/netcoreapp3.1/Imageboard.Backend.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/Imageboard.Backend",
+            "cwd": "${workspaceFolder}/Backend",
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",

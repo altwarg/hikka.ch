@@ -10,16 +10,12 @@ type Props = {
     inThread: boolean;
 }
 
-export class Thread extends React.Component<Props> {
-    render() {
-        return (
-            <div className="thread">
-                {this.props.threadInfo !== null && this.props.threadInfo!.Posts.map((item, key) => (
-                    <div className={item.No === 1 ? "thread__oppost" : "thread__post"} key={key}>
-                        <Post info={item} title={this.props.threadInfo!.Title} inThread={this.props.inThread} board={this.props.threadInfo!.Board} id={this.props.threadInfo!.Id} />
-                    </div>
-                ))}
+export const Thread: React.FC<Props> = ({ threadInfo, inThread }) => (
+    <div className="thread">
+        {threadInfo && threadInfo.Posts.map((item, key) => (
+            <div className={item.No === 1 ? "thread__oppost" : "thread__post"} key={key}>
+                <Post info={item} title={threadInfo.Title} inThread={inThread} board={threadInfo.Board} id={threadInfo.Id} />
             </div>
-        );
-    }
-}
+        ))}
+    </div>
+);
