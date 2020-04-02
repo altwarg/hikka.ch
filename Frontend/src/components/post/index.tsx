@@ -18,7 +18,7 @@ export const Post: React.FC<Props> = ({ info, className }) => (
         <Card.Body>
             {/* <Attached size="40.0Kb" width={591} height={453} source="/blank.jpg" />
             <Attached size="40.0Kb" width={591} height={453} source="/blank.jpg" /> */}
-            <Card.Text>
+            <Card.Text className="display-whitespace">
                 {parser.toReact(info.Message)}
             </Card.Text>
         </Card.Body>

@@ -84,6 +84,7 @@ export const PostForm: React.FC<Props> = ({ abbr, inThread }) => {
                         rows="10"
                         placeholder="A comment"
                         onChange={(e: FormEvent<FormControl & HTMLTextAreaElement>) => setComment(e.currentTarget.value)}
+                        required
                     />
                 </Col>
             </Form.Row>

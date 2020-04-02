@@ -16,7 +16,7 @@ export const BoardPage: React.FC<Props> = ({ links, name, abbr }) => {
     const [show, setShow] = useState(false);
 
     useEffect(() => {
-        get<Threads>(`threads/all?board=${abbr}&limit=${3}`)
+        get<Threads>(`threads/all?board=${abbr}&limit=3`)
             .then((data) => setFetched(data))
             .catch((err) => console.error(err));
     }, [abbr]);
