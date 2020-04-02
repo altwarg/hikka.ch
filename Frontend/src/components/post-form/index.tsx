@@ -1,6 +1,7 @@
 import React, { useState, FormEvent } from 'react';
 import { Form, FormControl, Col, Button } from 'react-bootstrap';
 
+import { MarkupPanel } from './components';
 import { Thread } from '../../utils/common';
 import { post } from '../../utils/api';
 
@@ -13,6 +14,8 @@ export const PostForm: React.FC<Props> = ({ abbr, inThread }) => {
     const [name, setName] = useState('');
     const [subject, setSubject] = useState('');
     const [comment, setComment] = useState('');
+
+    const onClick = (code: string) => setComment(code);
 
     const createThread = (e: FormEvent) => {
         e.preventDefault();
@@ -84,8 +87,14 @@ export const PostForm: React.FC<Props> = ({ abbr, inThread }) => {
                         rows="10"
                         placeholder="A comment"
                         onChange={(e: FormEvent<FormControl & HTMLTextAreaElement>) => setComment(e.currentTarget.value)}
+                        value={comment}
                         required
                     />
+                </Col>
+            </Form.Row>
+            <Form.Row>
+                <Col md="6" className="ml-auto mr-auto">
+                    <MarkupPanel onClick={onClick} />
                 </Col>
             </Form.Row>
             <Form.Row>
