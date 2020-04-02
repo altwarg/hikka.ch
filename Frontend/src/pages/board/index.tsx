@@ -1,71 +1,58 @@
 import React, { useState, useEffect } from 'react';
+import { Button, Collapse } from 'react-bootstrap';
 
-import { Thread, PostForm, BoardsDescription, BoardsLinks } from '../../components';
-import { Board, Thread as ThreadInfo } from '../../utils/common';
-import { get, post } from '../../utils/api';
+import { Thread, PageTopbar, PostForm } from '../../components';
+import { Boards, Threads } from '../../utils/common';
+import { post } from '../../utils/api';
 
-import './styles.scss';
-
-type Props = {
-    links: Board[];
-    inThread: boolean;
+type Props = Readonly<{
+    links: Boards;
     name: string;
     abbr: string;
-}
+}>;
 
-export const BoardPage: React.FC<Props> = ({ links, inThread, name, abbr }) => {
-    const [loaded, setLoaded] = useState(false);
+export const BoardPage: React.FC<Props> = ({ links, name, abbr }) => {
+    const [fetched, setFetched] = useState<Threads | null>(null);
     const [show, setShow] = useState(false);
-    const [noConnection, setNoConnection] = useState(false);
-    const [threads, setThreads] = useState<ThreadInfo[]>([]);
 
     useEffect(() => {
-        if (inThread === true) {
-            // We've opened thread
-            let id: string = document.location.pathname.substr(1).split('/')[1];
+        let dto = {
+            Board: abbr,
+            LastPostsLimit: 3
+        };
 
-            get<ThreadInfo>(`threads/${id}`)
-                .then((data) => { setThreads([ data ]); setLoaded(true); })
-                .catch((err) => setNoConnection(true));
-        } else {
-            let dto = {
-                Board: abbr,
-                LastPostsLimit: 3
-            };
+        post<Threads>('threads/all', dto)
+            .then((data) => setFetched(data))
+            .catch((err) => console.error(err));
+    }, [abbr]);
 
-            post<ThreadInfo[]>('threads/all', dto)
-                .then((data) => { setThreads(data); setLoaded(true); })
-                .catch((err) => setNoConnection(true));
-        }
-    }, []);
-
-    return !noConnection && loaded ? (
+    return fetched ? (
         <>
-            <BoardsLinks links={links.map(item => item.Abbr)} />
-            <BoardsDescription name={name} abbr={abbr} />
+            <PageTopbar abbr={abbr} links={links} name={name} />
 
-            <div className="clickable-link__container">
-                {show && (
-                    <span className="clickable-link" onClick={() => setShow(false)}>
-                        Close posting form
-                    </span>
-                )}
-
-                {!show && (
-                    <span className="clickable-link" onClick={() => setShow(true)}>
-                        Open posting form
-                    </span>
-                )}
+            <div className="text-center">
+                <Button
+                    onClick={() => setShow(!show)}
+                    size="sm"
+                    aria-expanded={show}
+                    aria-controls="form"
+                >
+                    {show ? 'Close posting form' : 'Create thread'}
+                </Button>
             </div>
 
-            {show && (
-                <PostForm abbr={abbr} inThread={inThread} />
-            )}
+            <Collapse in={show}>
+                <div id="form">
+                    <PostForm abbr={abbr} inThread={false} />
 
-            <hr />
+                    <hr />
+                </div>
+            </Collapse>
 
-            {threads.map((item, key) => (
-                <Thread threadInfo={item} inThread={inThread} key={key} />
+            {!show && <hr />}
+
+            {fetched.map((item, key) => (
+                <Thread info={item} key={key} className="mb-5" />
             ))}
         </>
     ) : <div />;

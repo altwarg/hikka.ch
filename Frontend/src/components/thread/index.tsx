@@ -1,21 +1,24 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { Card } from 'react-bootstrap';
 
 import { Post } from '../post';
-import { Thread as ThreadInfo } from '../../utils/common';
+import { Thread as Info } from '../../utils/common';
 
-import './styles.scss';
+type Props = Readonly<{
+    info: Info;
+    className: string;
+}>;
 
-type Props = {
-    threadInfo: ThreadInfo | null;
-    inThread: boolean;
-}
-
-export const Thread: React.FC<Props> = ({ threadInfo, inThread }) => (
-    <div className="thread">
-        {threadInfo && threadInfo.Posts.map((item, key) => (
-            <div className={item.No === 1 ? "thread__oppost" : "thread__post"} key={key}>
-                <Post info={item} title={threadInfo.Title} inThread={inThread} board={threadInfo.Board} id={threadInfo.Id} />
-            </div>
-        ))}
-    </div>
+export const Thread: React.FC<Props> = ({ info, className }) => (
+    <Card className={className}>
+        <Card.Header>
+            <strong>{info.Title}</strong> Posts: {info.PostsCount} <Link className="float-right" to={`/${info.Board}/${info.Id}`}><strong>Open thread</strong></Link>
+        </Card.Header>
+        <Card.Body>
+            {info.Posts.map((item, key) => (
+                <Post info={item} key={key} className={key !== info.Posts.length - 1 ? 'mb-3' : ''} />
+            ))}
+        </Card.Body>
+    </Card>
 );

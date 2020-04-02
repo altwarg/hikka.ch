@@ -1,34 +1,33 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Row, Col, ListGroup, ListGroupItem } from 'react-bootstrap';
 
-import { BoardsDescription } from '../../components'
-import { Board, ImageboardName } from '../../utils/common';
+import { PageTopbar } from '../../components'
+import { Boards, ImageboardName } from '../../utils/common';
 
-import './styles.scss';
-
-type Props = {
-    links: Board[];
-}
+type Props = Readonly<{
+    links: Boards;
+}>;
 
 export const HomePage: React.FC<Props> = ({ links }) => (
     <>
-        <BoardsDescription name={ImageboardName} abbr="/" />
+        <PageTopbar links={links} abbr="/" name={ImageboardName} />
 
         <hr />
 
-        <div className="row">
-            <div className="full-width">
+        <Row>
+            <Col md="12">
                 <h3 className="text-center">Boards</h3>
-                <ul id="homepage__boards-list" className="list-group">
+                <ListGroup horizontal>
                     {links.map((item, key) => (
-                        <li className="list-group-item homepage__board borderless" key={key}>
+                        <ListGroupItem className="borderless" key={key}>
                             <strong>
-                                <Link to={item.Abbr} className="homepage__board__link">{item.Abbr} — {item.Name}</Link>
+                                <Link to={item.Abbr}>{item.Name}</Link>
                             </strong>
-                        </li>
+                        </ListGroupItem>
                     ))}
-                </ul>
-            </div>
-        </div>
+                </ListGroup>
+            </Col>
+        </Row>
     </>
 );

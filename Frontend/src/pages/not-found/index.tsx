@@ -18,15 +18,15 @@ export const NotFoundPage: React.FC = () => {
     return (
         <>
             <div id="logo">
-                <h1 className="text-center">
+                <h1 className="text-center mt-4">
                     <span><Link to="/" className="link">{ImageboardName}</Link></span>
                 </h1>
             </div>
             <div className="box">
-                <div className="box__data">
+                <div className="box-data">
                     <img src={images[rand(0, images.length - 1)]} alt="Here must be something awesome" />
                 </div>
-                <div className="box__info">
+                <div className="box-info">
                     <span className="not-found">404</span>
 
                     <br />

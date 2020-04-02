@@ -1,57 +1,53 @@
 import React, { useState, useEffect } from 'react';
+import { Button, Collapse } from 'react-bootstrap';
 
-import { Thread as ThreadItem, PostForm, BoardsDescription, BoardsLinks } from '../../components';
-import { Thread, Board } from '../../utils/common';
+import { Thread as ThreadItem, PageTopbar, PostForm } from '../../components';
+import { Thread, Boards } from '../../utils/common';
 import { get } from '../../utils/api';
 
-import './styles.scss';
-
-type Props = {
-    links: Board[];
-    inThread: boolean;
+type Props = Readonly<{
+    links: Boards;
     name: string;
     abbr: string;
     id: string;
-}
+}>;
 
-export const ThreadPage: React.FC<Props> = ({ links, inThread, name, abbr, id }) => {
-    const [loaded, setLoaded] = useState(false);
-    const [show, setShow] = useState(false);
-    const [noConnection, setNoConnection] = useState(false);
+export const ThreadPage: React.FC<Props> = ({ links, name, abbr, id }) => {
     const [fetched, setFetched] = useState<Thread | null>(null);
+    const [show, setShow] = useState(false);
 
     useEffect(() => {
         get<Thread>(`threads/${id}`)
-            .then((data) => { setFetched(data); setLoaded(true); })
-            .catch((err) => setNoConnection(true));
-    }, []);
+            .then((data) => setFetched(data))
+            .catch((err) => console.error(err));
+    }, [id, abbr]);
 
-    return !noConnection && loaded ? (
+    return fetched ? (
         <>
-            <BoardsLinks links={links.map(item => item.Abbr)} />
-            <BoardsDescription name={name} abbr={abbr} />
+            <PageTopbar abbr={abbr} links={links} name={name} />
 
-            <div className="clickable-link__container">
-                {show && (
-                    <span className="clickable-link" onClick={() => setShow(false)}>
-                        Close posting form
-                    </span>
-                )}
-
-                {!show && (
-                    <span className="clickable-link" onClick={() => setShow(true)}>
-                        Open posting form
-                    </span>
-                )}
+            <div className="text-center">
+                <Button
+                    onClick={() => setShow(!show)}
+                    size="sm"
+                    aria-expanded={show}
+                    aria-controls="form"
+                >
+                    {show ? 'Close posting form' : 'Reply to thread'}
+                </Button>
             </div>
 
-            {show && (
-                <PostForm abbr={abbr} inThread={inThread} />
-            )}
+            <Collapse in={show}>
+                <div id="form">
+                    <PostForm abbr={abbr} inThread={true} />
 
-            <hr />
+                    <hr />
+                </div>
+            </Collapse>
 
-            <ThreadItem threadInfo={fetched} inThread={inThread} />
+            {!show && <hr />}
+
+            <ThreadItem info={fetched} className="mb-5" />
         </>
     ) : <div />;
 }

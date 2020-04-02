@@ -1,22 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, FormEvent } from 'react';
+import { Form, FormControl, Col, Button } from 'react-bootstrap';
 
 import { Thread } from '../../utils/common';
 import { post } from '../../utils/api';
 
-import './styles.scss';
-
-type Props = {
+type Props = Readonly<{
     abbr: string;
     inThread: boolean;
-}
+}>;
 
 export const PostForm: React.FC<Props> = ({ abbr, inThread }) => {
-    const [charsLeft, setCharsLeft] = useState(15000);
     const [name, setName] = useState('');
     const [subject, setSubject] = useState('');
     const [comment, setComment] = useState('');
 
-    const createThread = (e: React.MouseEvent) => {
+    const createThread = (e: FormEvent) => {
         e.preventDefault();
         let dto = {
             Board: abbr,
@@ -34,7 +32,7 @@ export const PostForm: React.FC<Props> = ({ abbr, inThread }) => {
             .catch((err) => console.error(err));
     }
 
-    const createPost = (e: React.MouseEvent) => {
+    const createPost = (e: FormEvent) => {
         e.preventDefault();
         let dto = {
             Name: name,
@@ -49,66 +47,56 @@ export const PostForm: React.FC<Props> = ({ abbr, inThread }) => {
     }
 
     return (
-        <form className="postform">
+        <Form
+            onSubmit={(e: FormEvent): void => {
+                if (inThread) {
+                    createThread(e);
+                } else {
+                    createPost(e);
+                }
+            }}
+        >
             <hr />
 
-            <div className="postform__raw">
-                <input
-                    type="text"
-                    id="name"
-                    className="postform__input postform__input__inline input"
-                    placeholder="Name"
-                    onChange={(e) => setName(e.target.value)}
-                />
-                <input
-                    type="submit"
-                    id="submitDesktop"
-                    className="button desktop"
-                    value="Send"
-                    onClick={(e) => inThread ? createPost(e) : createThread(e)}
-                />
-            </div>
-
-            <div className="postform__raw">
-                <input
-                    type="text"
-                    id="subject"
-                    className="postform__input input"
-                    placeholder="Subject"
-                    onChange={(e) => setSubject(e.target.value)}
-                />
-            </div>
-
-            <div className="postform__raw postform__raw__rel">
-                {charsLeft > 0 && (
-                    <span className="postform__len">{charsLeft}</span>
-                )}
-
-                {charsLeft < 0 && (
-                    <span className="postform__len">Post length exceeded by {(-1) * charsLeft} characters</span>
-                )}
-
-                <textarea
-                    name="comment"
-                    id="comment"
-                    className="postform__input input"
-                    rows={10}
-                    placeholder="A comment. Max length is 15000 characters"
-                    onChange={(e) => {
-                        setCharsLeft(15000 - e.target.value.length);
-                        setComment(e.target.value)
-                    }}
-                />
-            </div>
-
-            <div className="mobile">
-                <input
-                    type="submit"
-                    id="submitMobile"
-                    className="mobile button-mobile"
-                    value="Send"
-                    onClick={(e) => inThread ? createPost(e) : createThread(e)} />
-            </div>
-        </form>
+            <Form.Row className="mb-1">
+                <Col xs="12" md="5" className="ml-auto">
+                    <FormControl
+                        type="text"
+                        size="sm"
+                        placeholder="Name"
+                        onChange={(e: FormEvent<FormControl & HTMLInputElement>) => setName(e.currentTarget.value)}
+                    />
+                </Col>
+                <Col md="1" className="desktop mr-auto">
+                    <Button type="submit" size="sm" className="w-100">Send</Button>
+                </Col>
+            </Form.Row>
+            <Form.Row className="mb-1">
+                <Col md="6" className="ml-auto mr-auto">
+                    <FormControl
+                        type="text"
+                        size="sm"
+                        placeholder="Subject"
+                        onChange={(e: FormEvent<FormControl & HTMLInputElement>) => setSubject(e.currentTarget.value)}
+                    />
+                </Col>
+            </Form.Row>
+            <Form.Row className="mb-1">
+                <Col md="6" className="ml-auto mr-auto">
+                    <FormControl
+                        as="textarea"
+                        size="sm"
+                        rows="10"
+                        placeholder="A comment"
+                        onChange={(e: FormEvent<FormControl & HTMLTextAreaElement>) => setComment(e.currentTarget.value)}
+                    />
+                </Col>
+            </Form.Row>
+            <Form.Row>
+                <Col className="mobile">
+                    <Button type="submit" size="sm">Send</Button>
+                </Col>
+            </Form.Row>
+        </Form>
     );
 }
