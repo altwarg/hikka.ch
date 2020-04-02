@@ -23,6 +23,15 @@ body {
     display: none;
 }
 
+.spoiler {
+    color: black;
+    background-color: black;
+
+    &:hover {
+        background-color: inherit;
+    }
+}
+
 @media (min-width: 768px) {
     body {
         font-size: 16px;
