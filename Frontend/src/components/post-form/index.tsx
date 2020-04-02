@@ -25,10 +25,7 @@ export const PostForm: React.FC<Props> = ({ abbr, inThread }) => {
 
         // Attempt to create new thread
         post<Thread>('threads/new', dto)
-            .then((data) => {
-                window.location.reload();
-                window.location.href = `/${data.Board}/${data.Id}`;
-            })
+            .then((data) => window.location.href = `/${data.Board}/${data.Id}`)
             .catch((err) => console.error(err));
     }
 
@@ -49,11 +46,9 @@ export const PostForm: React.FC<Props> = ({ abbr, inThread }) => {
     return (
         <Form
             onSubmit={(e: FormEvent): void => {
-                if (inThread) {
-                    createThread(e);
-                } else {
-                    createPost(e);
-                }
+                inThread
+                    ? createPost(e)
+                    : createThread(e);
             }}
         >
             <hr />

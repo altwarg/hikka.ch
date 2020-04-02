@@ -22,21 +22,19 @@ namespace Imageboard.Backend.Controllers {
             return Created(nameof(CreateThread), this.threadsService.CreateThread(data));
         }
 
-        [HttpPost("all")]
+        [HttpGet("all")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult GetThreads([FromBody] GetThreadsDTO data) {
-            if (this.boardsService.BoardExists(data.Board)) {
-                return Ok(this.threadsService.GetThreads(data.Board, data.LastPostsLimit));
+        public IActionResult GetThreads(string board, int? limit) {
+            if (board == null && limit == null) {
+                return Ok(this.threadsService.GetAllThreads());
+            }
+
+            if (this.boardsService.BoardExists(board)) {
+                return Ok(this.threadsService.GetThreads(board, limit.Value));
             } else {
                 return NotFound();
             }
-        }
-
-        [HttpGet("all")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult GetAllThreads() {
-            return Ok(this.threadsService.GetAllThreads());
         }
 
         [HttpGet("{id}")]

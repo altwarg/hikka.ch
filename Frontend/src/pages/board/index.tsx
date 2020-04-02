@@ -3,7 +3,7 @@ import { Button, Collapse } from 'react-bootstrap';
 
 import { Thread, PageTopbar, PostForm } from '../../components';
 import { Boards, Threads } from '../../utils/common';
-import { post } from '../../utils/api';
+import { get } from '../../utils/api';
 
 type Props = Readonly<{
     links: Boards;
@@ -16,12 +16,7 @@ export const BoardPage: React.FC<Props> = ({ links, name, abbr }) => {
     const [show, setShow] = useState(false);
 
     useEffect(() => {
-        let dto = {
-            Board: abbr,
-            LastPostsLimit: 3
-        };
-
-        post<Threads>('threads/all', dto)
+        get<Threads>(`threads/all?board=${abbr}&limit=${3}`)
             .then((data) => setFetched(data))
             .catch((err) => console.error(err));
     }, [abbr]);
