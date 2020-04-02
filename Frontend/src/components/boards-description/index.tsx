@@ -14,8 +14,8 @@ export const BoardsDescription: React.FC<Props> = ({ name, abbr }) => (
     <>
         {name !== '' && name !== ImageboardName && (
             <>
-                <h1 className="text-center">
-                    <span><Link to={'/' + abbr} className="link">{name}</Link></span>
+                <h1 className="text-center mt-4">
+                    <span><Link to={'/' + abbr} className="link">/{abbr}/ – {name}</Link></span>
                 </h1>
 
                 <hr />
@@ -24,8 +24,8 @@ export const BoardsDescription: React.FC<Props> = ({ name, abbr }) => (
 
         {name === ImageboardName && (
             <>
-                <h1 className="text-center"><Emoji symbol="🔰" />{ImageboardName}</h1>
-                <h2 className="text-center">Welcome. Once again</h2>
+                <h1 className="text-center mt-4"><Emoji symbol="🔰" />{ImageboardName}</h1>
+                <h2 className="text-center mt-4">Welcome. Once again</h2>
 
                 <hr />
 

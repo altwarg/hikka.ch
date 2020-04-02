@@ -47,7 +47,7 @@ export const App: React.FC = () => {
     }, []);
 
     return boards && threads ? (
-        <Container>
+        <Container fluid>
             <BrowserRouter>
                 <Switch>
                     {/* Home route */}

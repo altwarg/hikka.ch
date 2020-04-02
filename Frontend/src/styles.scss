@@ -2,3 +2,36 @@
 @import '~bootstrap/scss/variables';
 @import '~bootstrap/scss/mixins';
 @import '~bootstrap/scss/bootstrap';
+
+body {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    color: #333;
+    background-color: #eee;
+}
+
+.borderless {
+    border: none;
+    background-color: #eee;
+}
+
+.mobile {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    body {
+        font-size: 16px;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .desktop {
+        display: none !important;
+    }
+
+    .mobile {
+        display: initial !important;
+        clear: both !important;
+    }
+}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Button, Collapse } from 'react-bootstrap';
 
-import { Thread as ThreadItem, PageTopbar } from '../../components';
+import { Thread as ThreadItem, PageTopbar, PostForm } from '../../components';
 import { Thread, Boards } from '../../utils/common';
 import { get } from '../../utils/api';
 
@@ -13,6 +14,7 @@ type Props = Readonly<{
 
 export const ThreadPage: React.FC<Props> = ({ links, name, abbr, id }) => {
     const [fetched, setFetched] = useState<Thread | null>(null);
+    const [show, setShow] = useState(false);
 
     useEffect(() => {
         get<Thread>(`threads/${id}`)
@@ -22,11 +24,30 @@ export const ThreadPage: React.FC<Props> = ({ links, name, abbr, id }) => {
 
     return fetched ? (
         <>
-            <PageTopbar abbr={abbr} inThread={true} links={links} name={name} />
+            <PageTopbar abbr={abbr} links={links} name={name} />
 
-            <hr />
+            <div className="text-center">
+                <Button
+                    onClick={() => setShow(!show)}
+                    size="sm"
+                    aria-expanded={show}
+                    aria-controls="form"
+                >
+                    {show ? 'Close posting form' : 'Reply to thread'}
+                </Button>
+            </div>
 
-            <ThreadItem info={fetched} inThread={true} />
+            <Collapse in={show}>
+                <div id="form">
+                    <PostForm abbr={abbr} inThread={true} />
+
+                    <hr />
+                </div>
+            </Collapse>
+
+            {!show && <hr />}
+
+            <ThreadItem info={fetched} className="mb-5" />
         </>
     ) : <div />;
 }
