@@ -19,11 +19,14 @@ export const PostForm: React.FC<Props> = ({ abbr, inThread }) => {
 
     const createThread = (e: FormEvent) => {
         e.preventDefault();
+
+        let formatedMessage = comment.split('\n').map(item => item.startsWith('>') ? `[green]${item}[/green]` : item).join('\n');
+
         let dto = {
             Board: abbr,
             Name: name,
             Title: subject,
-            Message: comment
+            Message: formatedMessage,
         };
 
         // Attempt to create new thread
@@ -34,9 +37,12 @@ export const PostForm: React.FC<Props> = ({ abbr, inThread }) => {
 
     const createPost = (e: FormEvent) => {
         e.preventDefault();
+
+        let formatedMessage = comment.split('\n').map(item => item.startsWith('>') ? `[green]${item}[/green]` : item).join('\n');
+
         let dto = {
             Name: name,
-            Message: comment,
+            Message: formatedMessage,
             Thread: window.location.pathname.substr(1).split('/')[1],
         };
 

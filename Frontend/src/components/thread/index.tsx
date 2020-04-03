@@ -8,16 +8,25 @@ import { Thread as Info } from '../../utils/common';
 type Props = Readonly<{
     info: Info;
     className: string;
+    inThread: boolean;
 }>;
 
-export const Thread: React.FC<Props> = ({ info, className }) => (
+export const Thread: React.FC<Props> = ({ info, className, inThread }) => (
     <Card className={className}>
         <Card.Header>
-            <strong>{info.Title}</strong> Posts: {info.PostsCount} <Link className="float-right" to={`/${info.Board}/${info.Id}`}><strong>Open thread</strong></Link>
+            <span className="font-weight-bold mr-3">{info.Title}</span>
+            <span>Posts: {info.PostsCount}</span>
+            { !inThread && <Link className="float-right font-weight-bold" to={`/${info.Board}/${info.Id}`}>Open thread</Link>}
         </Card.Header>
         <Card.Body>
             {info.Posts.map((item, key) => (
-                <Post info={item} key={key} className={key !== info.Posts.length - 1 ? 'mb-3' : ''} />
+                <Post
+                    info={item}
+                    board={info.Board}
+                    id={info.Id}
+                    key={key}
+                    className={key !== info.Posts.length - 1 ? 'mb-3' : ''}
+                />
             ))}
         </Card.Body>
     </Card>

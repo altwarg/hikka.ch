@@ -1,29 +1,37 @@
 import React, { useState, useEffect } from 'react';
+import { RouteComponentProps, Redirect } from 'react-router-dom';
 import { Button, Collapse } from 'react-bootstrap';
 
 import { Thread, PageTopbar, PostForm } from '../../components';
 import { Boards, Threads } from '../../utils/common';
 import { get } from '../../utils/api';
 
+type RouteProps = RouteComponentProps<Readonly<{
+    board: string;
+}>>;
+
 type Props = Readonly<{
+    routeProps: RouteProps;
     links: Boards;
-    name: string;
-    abbr: string;
 }>;
 
-export const BoardPage: React.FC<Props> = ({ links, name, abbr }) => {
-    const [fetched, setFetched] = useState<Threads | null>(null);
+export const BoardPage: React.FC<Props> = ({ routeProps, links }) => {
+    const [threads, setThreads] = useState<Threads | null>(null);
+    const [error, setError] = useState(false);
     const [show, setShow] = useState(false);
+
+    const abbr = routeProps.match.params.board;
 
     useEffect(() => {
         get<Threads>(`threads/all?board=${abbr}&limit=3`)
-            .then((data) => setFetched(data))
-            .catch((err) => console.error(err));
+            .then((data) => setThreads(data))
+            .catch((err) => setError(true));
     }, [abbr]);
 
-    return fetched ? (
+
+    return threads ? (
         <>
-            <PageTopbar abbr={abbr} links={links} name={name} />
+            <PageTopbar abbr={abbr} links={links} />
 
             <div className="text-center">
                 <Button
@@ -46,9 +54,9 @@ export const BoardPage: React.FC<Props> = ({ links, name, abbr }) => {
 
             {!show && <hr />}
 
-            {fetched.map((item, key) => (
-                <Thread info={item} key={key} className="mb-5" />
+            {threads.map((item, key) => (
+                <Thread info={item} key={key} className="mb-5" inThread={false} />
             ))}
         </>
-    ) : <div />;
+    ) : error ? <Redirect to="/not-found" /> : <div />;
 }
