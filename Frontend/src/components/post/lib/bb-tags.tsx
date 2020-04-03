@@ -1,7 +1,7 @@
 import React from 'react';
 import parser, { Tag } from 'bbcode-to-react';
 
-export class Spoiler extends Tag {
+export class SpoilerTag extends Tag {
     toReact(): JSX.Element {
         return (
             <span className="spoiler">{this.getComponents()}</span>
@@ -9,5 +9,22 @@ export class Spoiler extends Tag {
     }
 }
 
-// Have no idea why it won't works without internal registerTag()
-parser.registerTag('spoiler', Spoiler);
+export class GreenTextTag extends Tag {
+    toReact(): JSX.Element {
+        return (
+            <span className="text-success">{this.getComponents()}</span>
+        );
+    }
+}
+
+// export class LinkTag extends Tag {
+//     toReact(): JSX.Element {
+//         return (
+//             <a></a>
+//         );
+//     }
+// }
+
+parser.registerTag('spoiler', SpoilerTag);
+parser.registerTag('green', GreenTextTag);
+// parser.registerTag('link', LinkTag);

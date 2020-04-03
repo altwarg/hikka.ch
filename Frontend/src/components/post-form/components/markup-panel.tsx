@@ -7,6 +7,7 @@ import {
     faUnderline,
     faStrikethrough,
     faChevronRight,
+    faAngleDoubleRight,
     faSquare,
     faCode
 } from '@fortawesome/free-solid-svg-icons';
@@ -22,6 +23,7 @@ export const MarkupPanel: React.FC<Props> = ({ onClick }) => (
         <Button variant="light" onClick={(): void => onClick('[u][/u]')}><FontAwesomeIcon icon={faUnderline} /></Button>
         <Button variant="light" onClick={(): void => onClick('[s][/s]')}><FontAwesomeIcon icon={faStrikethrough} /></Button>
         <Button variant="light" onClick={(): void => onClick('>')}><FontAwesomeIcon icon={faChevronRight} /></Button>
+        <Button variant="light" onClick={(): void => onClick('>>')}><FontAwesomeIcon icon={faAngleDoubleRight} /></Button>
         <Button variant="light" onClick={(): void => onClick('[spoiler][/spoiler]')}><FontAwesomeIcon icon={faSquare} /></Button>
         <Button variant="light" onClick={(): void => onClick('[code][/code]')}><FontAwesomeIcon icon={faCode} /></Button>
     </ButtonGroup>
