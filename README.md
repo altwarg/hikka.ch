@@ -12,7 +12,7 @@ For an imageboard i've used:
     * Video
     * Pictures
 - [ ] Thumbnail generation
-- [x] BBCode markup support [in progress]
+- [x] BBCode markup support: `[b], [i], [u], [s], [code], [spoiler], >>, >`
 - [ ] SAGE support
 - [ ] Captcha
 - [ ] Search
