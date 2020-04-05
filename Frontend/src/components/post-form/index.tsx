@@ -24,7 +24,7 @@ export const PostForm: React.FC<Props> = ({ abbr, inThread }) => {
         let formatted = comment;
 
         mentionRule.exec(formatted);
-        formatted = formatted.replace(mentionRule, `[mention]$1#${document.location.pathname}[/mention]`);
+        formatted = formatted.replace(mentionRule, `[mention]$1[/mention]`);
 
         greenTextRule.exec(formatted);
         formatted = formatted.replace(greenTextRule, '[green]$1[/green]');
