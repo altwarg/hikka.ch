@@ -8,9 +8,7 @@ type Props = Readonly<{
 export const ScrollInto: React.FC<Props> = ({ children, selector }) => {
     const scrollInfoView = () => {
         const el = document.querySelector(selector);
-        el!.scrollIntoView({
-            behavior: 'smooth'
-        });
+        el!.scrollIntoView();
     }
 
     return (

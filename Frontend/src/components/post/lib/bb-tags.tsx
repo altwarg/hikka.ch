@@ -19,8 +19,11 @@ export class GreenTextTag extends Tag {
 
 export class MentionTag extends Tag {
     toReact(): JSX.Element {
+        let content = this.getContent();
+        let info = content.substring(8).split('#');
+
         return (
-            <a href={document.location.pathname}>{this.getComponents()}</a>
+            <a href={`${info[1]}#id-${info[0]}`}>{`>>${info[0]}`}</a>
         );
     }
 }
