@@ -17,14 +17,14 @@ export class GreenTextTag extends Tag {
     }
 }
 
-// export class LinkTag extends Tag {
-//     toReact(): JSX.Element {
-//         return (
-//             <a></a>
-//         );
-//     }
-// }
+export class MentionTag extends Tag {
+    toReact(): JSX.Element {
+        return (
+            <a href={document.location.pathname}>{this.getComponents()}</a>
+        );
+    }
+}
 
 parser.registerTag('spoiler', SpoilerTag);
 parser.registerTag('green', GreenTextTag);
-// parser.registerTag('link', LinkTag);
+parser.registerTag('mention', MentionTag);

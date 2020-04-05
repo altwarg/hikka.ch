@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { Post as Info } from '../../utils/common';
 import { ScrollInto } from '../scroll-into-view';
-import { SpoilerTag, GreenTextTag } from './lib/bb-tags';
+import { SpoilerTag, GreenTextTag, MentionTag } from './lib/bb-tags';
 // import { Attached } from './components';
 
 type Props = Readonly<{
@@ -19,6 +19,7 @@ export const Post: React.FC<Props> = ({ info, board, id, className }) => {
     useEffect(() => {
         parser.registerTag('spoiler', SpoilerTag);
         parser.registerTag('green', GreenTextTag);
+        parser.registerTag('mention', MentionTag);
     }, []);
 
     return (

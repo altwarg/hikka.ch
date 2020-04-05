@@ -15,18 +15,30 @@ export const PostForm: React.FC<Props> = ({ abbr, inThread }) => {
     const [subject, setSubject] = useState('');
     const [comment, setComment] = useState('');
 
+    const mentionRule = /\B(>>\d+)\b/gm;
+    const greenTextRule = /^(>{1}[\w\d\s][^\n]+)$/gm;
+
     const onClick = (code: string) => setComment(code);
+
+    const formatComment = (): string => {
+        let formatted = comment;
+
+        mentionRule.exec(formatted);
+        formatted = formatted.replace(mentionRule, '[mention]$1[/mention]');
+
+        greenTextRule.exec(formatted);
+        formatted = formatted.replace(greenTextRule, '[green]$1[/green]');
+
+        return formatted;
+    }
 
     const createThread = (e: FormEvent) => {
         e.preventDefault();
-
-        let formatedMessage = comment.split('\n').map(item => item.startsWith('>') ? `[green]${item}[/green]` : item).join('\n');
-
         let dto = {
             Board: abbr,
             Name: name,
             Title: subject,
-            Message: formatedMessage,
+            Message: formatComment(),
         };
 
         // Attempt to create new thread
@@ -37,12 +49,9 @@ export const PostForm: React.FC<Props> = ({ abbr, inThread }) => {
 
     const createPost = (e: FormEvent) => {
         e.preventDefault();
-
-        let formatedMessage = comment.split('\n').map(item => item.startsWith('>') ? `[green]${item}[/green]` : item).join('\n');
-
         let dto = {
             Name: name,
-            Message: formatedMessage,
+            Message: formatComment(),
             Thread: window.location.pathname.substr(1).split('/')[1],
         };
 
