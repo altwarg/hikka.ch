@@ -14,8 +14,16 @@ const request = <T>(method: string, url: string, data?: unknown): Promise<T> => 
     }
 
     return fetch(url, options)
-        .then((res) => res.json())
-        .catch((err) => console.error(err));
+        .then(async (res) => {
+            if (res.ok) {
+                return await res.json();
+            }
+
+            return Promise.reject(new Error('Not 200-OK response'));
+        })
+        .catch((err) => {
+            return Promise.reject(err);
+        });
 }
 
 export const get = <T>(url: string): Promise<T> =>

@@ -7,7 +7,7 @@ type Props = Readonly<{
 
 export const BoardsLinks: React.FC<Props> = ({ links }) => (
     <>
-        <strong>
+        <span className="font-weight-bold">
             [&nbsp; {links.map((item, key) => (
                 <Fragment key={key}>
                     <Link to={'/' + item} key={key}>{item}</Link>
@@ -16,12 +16,12 @@ export const BoardsLinks: React.FC<Props> = ({ links }) => (
                     )}
                 </Fragment>
         ))} &nbsp;]
-        </strong>
+        </span>
 
         &nbsp;
 
-        <strong>
+        <span className="font-weight-bold">
             [&nbsp; <Link to="/">Home</Link> &nbsp;]
-        </strong>
+        </span>
     </>
 );

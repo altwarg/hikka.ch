@@ -15,8 +15,21 @@ body {
     background-color: #eee;
 }
 
+.display-whitespace {
+    white-space: pre-line;
+}
+
 .mobile {
     display: none;
+}
+
+.spoiler {
+    color: black;
+    background-color: black;
+
+    &:hover {
+        background-color: inherit;
+    }
 }
 
 @media (min-width: 768px) {

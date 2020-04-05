@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -10,16 +11,21 @@ using Imageboard.Backend.Models;
 
 namespace Imageboard.Backend.Services {
     public class ThreadsService {
+        #region Fields
         private readonly MongoClient client;
         private readonly IMongoDatabase database;
         private readonly IMongoCollection<Thread> threads;
+        #endregion
 
+        #region Constructor
         public ThreadsService(IImageboardDBSettings settings) {
             this.client = new MongoClient(settings.ConnectionString);
             this.database = this.client.GetDatabase(settings.DatabaseName);
             this.threads = this.database.GetCollection<Thread>(settings.ThreadsCollectionName);
         }
+        #endregion
 
+        #region Methods
         public List<Thread> GetThreads(string abbr) {
             return this.threads.Find(x => x.Board == abbr).ToList();
         }
@@ -57,6 +63,8 @@ namespace Imageboard.Backend.Services {
         }
 
         public Thread CreateThread(NewThreadDTO data) {
+            data.Message = this.FormatMentions(data.Message);
+
             var post = new Post() {
                 Id = Counter.GetNextSequenceValue("postId", this.database).ToString(),
                 No = 1,
@@ -78,6 +86,8 @@ namespace Imageboard.Backend.Services {
         }
 
         public Thread CreatePost(NewPostDTO data) {
+            data.Message = this.FormatMentions(data.Message);
+
             var thread = this.GetThread(data.Thread);
             var no = thread.Posts.Last().No + 1;
 
@@ -95,5 +105,27 @@ namespace Imageboard.Backend.Services {
             this.threads.ReplaceOne(x => x.Id == data.Thread, thread);
             return thread;
         }
+
+        private string FormatMentions(string message) {
+            var formatted = message;
+
+            if (message.Contains(">>")) {
+                foreach (Match match in Regex.Matches(message, @"\B>>(\d+)\b", RegexOptions.Multiline)) {
+                    foreach (var inspectedThread in GetAllThreads()) {
+                        var id = match.Groups[1].Value;
+
+                        var inspectedPost = inspectedThread.Posts.Find(item => item.Id == id);
+                        if (inspectedPost == null) {
+                            continue;
+                        }
+
+                        formatted = formatted.Replace($">>{id}", $">>{id}#/{inspectedThread.Board}/{inspectedThread.Id}");
+                    }
+                }
+            }
+
+            return formatted;
+        }
+        #endregion
     }
 }

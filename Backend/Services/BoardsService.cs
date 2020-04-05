@@ -6,16 +6,21 @@ using Imageboard.Backend.Models;
 
 namespace Imageboard.Backend.Services {
     public class BoardsService {
+        #region Fields
         private readonly MongoClient client;
         private readonly IMongoDatabase database;
         private readonly IMongoCollection<Board> boards;
+        #endregion
 
+        #region Constructor
         public BoardsService(IImageboardDBSettings settings) {
             this.client = new MongoClient(settings.ConnectionString);
             this.database = this.client.GetDatabase(settings.DatabaseName);
             this.boards = this.database.GetCollection<Board>(settings.BoardsCollectionName);
         }
+        #endregion
 
+        #region Methods
         public List<Board> GetBoards() {
             return this.boards.Find(x => true).ToList();
         }
@@ -40,5 +45,6 @@ namespace Imageboard.Backend.Services {
         public void RemoveBoard(string abbr) {
             this.boards.DeleteOne(x => x.Abbr == abbr);
         }
+        #endregion
     }
 }

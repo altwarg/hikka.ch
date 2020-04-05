@@ -1,6 +1,7 @@
 import React, { useState, FormEvent } from 'react';
 import { Form, FormControl, Col, Button } from 'react-bootstrap';
 
+import { MarkupPanel } from './components';
 import { Thread } from '../../utils/common';
 import { post } from '../../utils/api';
 
@@ -14,21 +15,35 @@ export const PostForm: React.FC<Props> = ({ abbr, inThread }) => {
     const [subject, setSubject] = useState('');
     const [comment, setComment] = useState('');
 
+    const mentionRule = /\B(>>\d+)\b/gm;
+    const greenTextRule = /^(>{1}[\w\d\s][^\n]+)$/gm;
+
+    const onClick = (code: string) => setComment(code);
+
+    const formatComment = (): string => {
+        let formatted = comment;
+
+        mentionRule.exec(formatted);
+        formatted = formatted.replace(mentionRule, `[mention]$1[/mention]`);
+
+        greenTextRule.exec(formatted);
+        formatted = formatted.replace(greenTextRule, '[green]$1[/green]');
+
+        return formatted;
+    }
+
     const createThread = (e: FormEvent) => {
         e.preventDefault();
         let dto = {
             Board: abbr,
             Name: name,
             Title: subject,
-            Message: comment
+            Message: formatComment(),
         };
 
         // Attempt to create new thread
         post<Thread>('threads/new', dto)
-            .then((data) => {
-                window.location.reload();
-                window.location.href = `/${data.Board}/${data.Id}`;
-            })
+            .then((data) => window.location.href = `/${data.Board}/${data.Id}`)
             .catch((err) => console.error(err));
     }
 
@@ -36,7 +51,7 @@ export const PostForm: React.FC<Props> = ({ abbr, inThread }) => {
         e.preventDefault();
         let dto = {
             Name: name,
-            Message: comment,
+            Message: formatComment(),
             Thread: window.location.pathname.substr(1).split('/')[1],
         };
 
@@ -49,11 +64,9 @@ export const PostForm: React.FC<Props> = ({ abbr, inThread }) => {
     return (
         <Form
             onSubmit={(e: FormEvent): void => {
-                if (inThread) {
-                    createThread(e);
-                } else {
-                    createPost(e);
-                }
+                inThread
+                    ? createPost(e)
+                    : createThread(e);
             }}
         >
             <hr />
@@ -89,7 +102,14 @@ export const PostForm: React.FC<Props> = ({ abbr, inThread }) => {
                         rows="10"
                         placeholder="A comment"
                         onChange={(e: FormEvent<FormControl & HTMLTextAreaElement>) => setComment(e.currentTarget.value)}
+                        value={comment}
+                        required
                     />
+                </Col>
+            </Form.Row>
+            <Form.Row>
+                <Col md="6" className="ml-auto mr-auto">
+                    <MarkupPanel onClick={onClick} />
                 </Col>
             </Form.Row>
             <Form.Row>
