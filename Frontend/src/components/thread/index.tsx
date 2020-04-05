@@ -13,8 +13,11 @@ type Props = Readonly<{
 
 export const Thread: React.FC<Props> = ({ info, className, inThread }) => {
     useEffect(() => {
-        if (inThread) {
-            document.querySelector(document.location.hash)!.scrollIntoView();
+        if (inThread && document.location.hash) {
+            const el = document.querySelector(document.location.hash)
+            if (el) {
+                el.scrollIntoView();
+            }
         }
     }, [inThread]);
 
