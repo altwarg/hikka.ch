@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, useRef, FormEvent } from 'react';
 import { Form, FormControl, Col, Button } from 'react-bootstrap';
 
 import { MarkupPanel } from './components';
@@ -15,10 +15,10 @@ export const PostForm: React.FC<Props> = ({ abbr, inThread }) => {
     const [subject, setSubject] = useState('');
     const [comment, setComment] = useState('');
 
+    const commentRef = useRef<FormControl<"textarea"> & HTMLTextAreaElement>(null);
+
     const mentionRule = /\B(>>\d+)\b/gm;
     const greenTextRule = /^(>{1}[\w\d\s][^\n]+)$/gm;
-
-    const onClick = (code: string) => setComment(code);
 
     const formatComment = (): string => {
         let formatted = comment;
@@ -99,17 +99,18 @@ export const PostForm: React.FC<Props> = ({ abbr, inThread }) => {
                     <FormControl
                         as="textarea"
                         size="sm"
-                        rows="10"
+                        rows={10}
                         placeholder="A comment"
                         onChange={(e: FormEvent<FormControl & HTMLTextAreaElement>) => setComment(e.currentTarget.value)}
                         value={comment}
+                        ref={commentRef}
                         required
                     />
                 </Col>
             </Form.Row>
             <Form.Row>
                 <Col md="6" className="ml-auto mr-auto">
-                    <MarkupPanel onClick={onClick} />
+                    <MarkupPanel textArea={commentRef.current!} />
                 </Col>
             </Form.Row>
             <Form.Row>
