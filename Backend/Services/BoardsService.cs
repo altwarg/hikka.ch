@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MongoDB.Driver;
 
 using Imageboard.Backend.Models;
+using Microsoft.Extensions.Options;
 
 namespace Imageboard.Backend.Services {
     public class BoardsService {
@@ -13,10 +14,10 @@ namespace Imageboard.Backend.Services {
         #endregion
 
         #region Constructor
-        public BoardsService(IImageboardDBSettings settings) {
-            this.client = new MongoClient(settings.ConnectionString);
-            this.database = this.client.GetDatabase(settings.DatabaseName);
-            this.boards = this.database.GetCollection<Board>(settings.BoardsCollectionName);
+        public BoardsService(IOptions<Settings> settings) {
+            this.client = new MongoClient(settings.Value.ConnectionString);
+            this.database = this.client.GetDatabase(settings.Value.Database);
+            this.boards = this.database.GetCollection<Board>(settings.Value.Boards);
         }
         #endregion
 

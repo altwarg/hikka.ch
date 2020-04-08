@@ -8,6 +8,7 @@ using MongoDB.Driver;
 
 using Imageboard.Backend.DTO;
 using Imageboard.Backend.Models;
+using Microsoft.Extensions.Options;
 
 namespace Imageboard.Backend.Services {
     public class ThreadsService {
@@ -18,10 +19,10 @@ namespace Imageboard.Backend.Services {
         #endregion
 
         #region Constructor
-        public ThreadsService(IImageboardDBSettings settings) {
-            this.client = new MongoClient(settings.ConnectionString);
-            this.database = this.client.GetDatabase(settings.DatabaseName);
-            this.threads = this.database.GetCollection<Thread>(settings.ThreadsCollectionName);
+        public ThreadsService(IOptions<Settings> settings) {
+            this.client = new MongoClient(settings.Value.ConnectionString);
+            this.database = this.client.GetDatabase(settings.Value.Database);
+            this.threads = this.database.GetCollection<Thread>(settings.Value.Threads);
         }
         #endregion
 
