@@ -2,71 +2,66 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+
+using Imageboard.Backend.Data.DTO;
+using Imageboard.Backend.Data.Repository;
+using Imageboard.Backend.Models;
+
+using Microsoft.Extensions.Options;
 
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-using Imageboard.Backend.DTO;
-using Imageboard.Backend.Models;
-
 namespace Imageboard.Backend.Services {
     public class ThreadsService {
-        #region Fields
-        private readonly MongoClient client;
-        private readonly IMongoDatabase database;
-        private readonly IMongoCollection<Thread> threads;
-        #endregion
+        private readonly ThreadsRepository threadsRepository = null;
+        private readonly BoardsRepository boardsRepository = null;
 
-        #region Constructor
-        public ThreadsService(IImageboardDBSettings settings) {
-            this.client = new MongoClient(settings.ConnectionString);
-            this.database = this.client.GetDatabase(settings.DatabaseName);
-            this.threads = this.database.GetCollection<Thread>(settings.ThreadsCollectionName);
-        }
-        #endregion
-
-        #region Methods
-        public List<Thread> GetThreads(string abbr) {
-            return this.threads.Find(x => x.Board == abbr).ToList();
+        public ThreadsService(IOptions<Settings> settings) {
+            this.threadsRepository = new ThreadsRepository(settings);
+            this.boardsRepository = new BoardsRepository(settings);
         }
 
-        public List<Thread> GetThreads(string abbr, int lastPostsLimit) {
-            var threads = this.threads.Find(x => x.Board == abbr).ToList();
-            foreach (var thread in threads) {
-                var opPost = thread.Posts[0];
-                var posts = thread.Posts.TakeLast(lastPostsLimit).ToList();
+        public async Task<List<Thread>> GetThreads(string board) {
+            return await this.threadsRepository.GetThreadsAsync(board);
+        }
 
-                if (!posts.Contains(opPost)) {
-                    posts.Insert(0, opPost);
+        public async Task<List<Thread>> GetThreads(string board, int lastPostsLimit) {
+            if (await this.boardsRepository.BoardExistsAsync(board)) {
+                var threads = await this.threadsRepository.GetThreadsAsync(board);
+                foreach (var thread in threads) {
+                    var opPost = thread.Posts[0];
+                    var posts = thread.Posts.TakeLast(lastPostsLimit).ToList();
+
+                    if (!posts.Contains(opPost)) {
+                        posts.Insert(0, opPost);
+                    }
+
+                    thread.Posts = posts;
                 }
 
-                thread.Posts = posts;
+                return threads;
             }
 
-            return threads;
+            return null;
         }
 
-        public Thread GetThread(string id) {
-            return this.threads.Find(x => x.Id == id).FirstOrDefault();
+        public async Task<Thread> GetThread(string id) {
+            return await this.threadsRepository.GetThreadAsync(id);
         }
 
-        public List<Thread> GetAllThreads() {
-            return this.threads.Find(x => true).ToList();
+        public async Task<List<Thread>> GetAllThreads() {
+            return await this.threadsRepository.GetThreadsAsync();
         }
 
-        public bool ThreadExists(string id) {
-            if (this.threads.Find(x => x.Id == id).FirstOrDefault() == null) {
-                return false;
-            }
+        public async Task<Thread> CreateThread(NewThreadDTO data) {
+            data.Message = await this.FormatMentions(data.Message);
 
-            return true;
-        }
-
-        public Thread CreateThread(NewThreadDTO data) {
-            data.Message = this.FormatMentions(data.Message);
+            var id = await this.threadsRepository.GetNextSequenceValueAsync("postId");
 
             var post = new Post() {
-                Id = Counter.GetNextSequenceValue("postId", this.database).ToString(),
+                Id = id.ToString(),
                 No = 1,
                 Name = !string.IsNullOrEmpty(data.Name) ? data.Name : null,
                 DateTime = DateTime.Now.ToString("dd/MM/yyyy ddd HH:mm:ss"),
@@ -81,37 +76,38 @@ namespace Imageboard.Backend.Services {
                 Posts = new List<Post>() { post }
             };
 
-            this.threads.InsertOne(thread);
+            await this.threadsRepository.AddThreadAsync(thread);
             return thread;
         }
 
-        public Thread CreatePost(NewPostDTO data) {
-            data.Message = this.FormatMentions(data.Message);
+        public async Task<Thread> CreatePost(NewPostDTO data) {
+            data.Message = await this.FormatMentions(data.Message);
 
-            var thread = this.GetThread(data.Thread);
+            var thread = await this.threadsRepository.GetThreadAsync(data.Thread);
             var no = thread.Posts.Last().No + 1;
+            var id = await this.threadsRepository.GetNextSequenceValueAsync("postId");
 
             var post = new Post() {
-                Id = Counter.GetNextSequenceValue("postId", this.database).ToString(),
+                Id = id.ToString(),
                 No = no,
                 Name = null,
                 DateTime = DateTime.Now.ToString("dd/MM/yyyy ddd HH:mm:ss"),
                 Message = data.Message
             };
 
-            thread.Posts.Add(post);
-            thread.PostsCount = thread.Posts.Count;
+            if (await this.threadsRepository.AddPostAsync(data.Thread, post)) {
+                return await this.threadsRepository.GetThreadAsync(data.Thread);
+            }
 
-            this.threads.ReplaceOne(x => x.Id == data.Thread, thread);
-            return thread;
+            return null;
         }
 
-        private string FormatMentions(string message) {
+        private async Task<string> FormatMentions(string message) {
             var formatted = message;
 
             if (message.Contains(">>")) {
                 foreach (Match match in Regex.Matches(message, @"\B>>(\d+)\b", RegexOptions.Multiline)) {
-                    foreach (var inspectedThread in GetAllThreads()) {
+                    foreach (var inspectedThread in await GetAllThreads()) {
                         var id = match.Groups[1].Value;
 
                         var inspectedPost = inspectedThread.Posts.Find(item => item.Id == id);
@@ -126,6 +122,5 @@ namespace Imageboard.Backend.Services {
 
             return formatted;
         }
-        #endregion
     }
 }

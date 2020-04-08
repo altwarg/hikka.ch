@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 
 namespace Imageboard.Backend.Models {
     public class Post {
@@ -7,5 +7,6 @@ namespace Imageboard.Backend.Models {
         public string DateTime { get; set; }
         public string Name { get; set; }
         public string Message { get; set; }
+        public List<byte[]> Attachments { get; set; }
     }
 }

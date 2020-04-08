@@ -1,4 +1,4 @@
-namespace Imageboard.Backend.DTO {
+namespace Imageboard.Backend.Data.DTO {
     public class NewThreadDTO {
         public string Title { get; set; }
         public string Board { get; set; }

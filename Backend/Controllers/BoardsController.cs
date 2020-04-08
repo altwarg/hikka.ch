@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
+﻿using System.Threading.Tasks;
 
 using Imageboard.Backend.Services;
+
+using Microsoft.AspNetCore.Mvc;
 
 namespace Imageboard.Backend.Controllers {
     [Route("api/boards")]
@@ -14,9 +15,8 @@ namespace Imageboard.Backend.Controllers {
         }
 
         [HttpGet("all")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult GetAllBoards() {
-            return Ok(this.boardsService.GetBoards());
+        public async Task<IActionResult> GetAllBoards() {
+            return Ok(await this.boardsService.GetBoardsAsync());
         }
     }
 }
