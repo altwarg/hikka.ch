@@ -1,51 +1,21 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
-using MongoDB.Driver;
-
+using Imageboard.Backend.Data.Repository;
 using Imageboard.Backend.Models;
+
 using Microsoft.Extensions.Options;
 
 namespace Imageboard.Backend.Services {
     public class BoardsService {
-        #region Fields
-        private readonly MongoClient client;
-        private readonly IMongoDatabase database;
-        private readonly IMongoCollection<Board> boards;
-        #endregion
+        private readonly BoardsRepository repository = null;
 
-        #region Constructor
         public BoardsService(IOptions<Settings> settings) {
-            this.client = new MongoClient(settings.Value.ConnectionString);
-            this.database = this.client.GetDatabase(settings.Value.Database);
-            this.boards = this.database.GetCollection<Board>(settings.Value.Boards);
-        }
-        #endregion
-
-        #region Methods
-        public List<Board> GetBoards() {
-            return this.boards.Find(x => true).ToList();
+            this.repository = new BoardsRepository(settings);
         }
 
-        public bool BoardExists(string abbr) {
-            if (this.boards.Find(x => x.Abbr == abbr).FirstOrDefault() == null) {
-                return false;
-            }
-
-            return true;
+        public async Task<List<Board>> GetBoardsAsync() {
+            return await this.repository.GetBoardsAsync();
         }
-
-        public Board CreateBoard(Board board) {
-            this.boards.InsertOne(board);
-            return board;
-        }
-
-        public void UpdateBoard(string abbr, Board board) {
-            this.boards.ReplaceOne(x => x.Abbr == abbr, board);
-        }
-
-        public void RemoveBoard(string abbr) {
-            this.boards.DeleteOne(x => x.Abbr == abbr);
-        }
-        #endregion
     }
 }
