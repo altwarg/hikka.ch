@@ -8,9 +8,10 @@ import { post } from '../../utils/api';
 type Props = Readonly<{
     abbr: string;
     inThread: boolean;
+    onSubmit: (msg: string) => void;
 }>;
 
-export const PostForm: React.FC<Props> = ({ abbr, inThread }) => {
+export const PostForm: React.FC<Props> = ({ abbr, inThread, onSubmit }) => {
     const [name, setName] = useState('');
     const [subject, setSubject] = useState('');
     const [comment, setComment] = useState('');
@@ -53,16 +54,28 @@ export const PostForm: React.FC<Props> = ({ abbr, inThread }) => {
 
             // Attempt to create new post
             post('posts/new', formData)
-                .then(() => window.location.reload())
-                .catch(err => console.error(err));
+                .then(() => {
+                    onSubmit('Your message has been submitted.');
+                    window.location.reload();
+                })
+                .catch((err) => {
+                    console.error(err);
+                    onSubmit(err);
+                });
         } else {
             formData.append('Title', subject);
             formData.append('Board', abbr);
 
             // Attempt to create new thread
             post<Thread>('threads/new', formData)
-                .then((data) => window.location.href = `/${data.board}/${data.id}`)
-                .catch((err) => console.error(err));
+                .then((data) => {
+                    onSubmit('Thread has been successfully created.');
+                    window.location.href = `/${data.board}/${data.id}`;
+                })
+                .catch((err) => {
+                    console.error(err);
+                    onSubmit(err);
+                });
         }
     }
 

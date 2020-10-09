@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
 import { Button, Collapse } from 'react-bootstrap';
 
-import { Thread, PageTopbar, PostForm } from '../../components';
+import { Thread, PageTopbar, PostForm, Toast } from '../../components';
 import { Boards, Threads } from '../../utils/common';
 import { get } from '../../utils/api';
 
@@ -18,20 +18,30 @@ type Props = Readonly<{
 export const BoardPage: React.FC<Props> = ({ routeProps, links }) => {
     const [threads, setThreads] = useState<Threads | null>(null);
     const [error, setError] = useState(false);
+    const [toastMsg, setToastMsg] = useState('');
+    const [showToast, setShowToast] = useState(false);
     const [show, setShow] = useState(false);
 
     const abbr = routeProps.match.params.board;
 
     useEffect(() => {
         get<Threads>(`threads/all?board=${abbr}&limit=3`)
-            .then((data) => setThreads(data))
+            .then((data) => {
+                setThreads(data);
+                showToastMessage('Data loaded from database.');
+            })
             .catch(err => setError(true));
     }, []);
 
+    const showToastMessage = (msg: string) => {
+        setToastMsg(msg);
+        setShowToast(true);
+    }
 
     return threads ? (
         <>
             <PageTopbar abbr={abbr} links={links} />
+            <Toast msg={toastMsg} show={showToast} onClose={() => setShowToast(false)} />
 
             <div className="text-center">
                 <Button
@@ -46,7 +56,7 @@ export const BoardPage: React.FC<Props> = ({ routeProps, links }) => {
 
             <Collapse in={show}>
                 <div id="form">
-                    <PostForm abbr={abbr} inThread={false} />
+                    <PostForm abbr={abbr} inThread={false} onSubmit={showToastMessage} />
 
                     <hr />
                 </div>
