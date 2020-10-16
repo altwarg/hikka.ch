@@ -3,7 +3,7 @@ import { RouteComponentProps, Redirect } from 'react-router-dom';
 import { Button, Collapse } from 'react-bootstrap';
 
 import { Thread as ThreadItem, PageTopbar, PostForm, Toast } from '../../components';
-import { Thread, Boards } from '../../utils/common';
+import { Thread, Boards, FetchAction } from '../../utils/common';
 import { get } from '../../utils/api';
 
 type RouteProps = RouteComponentProps<Readonly<{
@@ -26,19 +26,51 @@ export const ThreadPage: React.FC<Props> = ({ routeProps, links }) => {
     const abbr = routeProps.match.params.board;
     const id = routeProps.match.params.thread;
 
-    useEffect(() => {
-        get<Thread>(`threads/${id}`)
-            .then(data => {
-                setThread(data);
-                showToastMessage('Data loaded from database.');
-            })
-            .catch(err => setError(true));
-    }, [id, abbr]);
-
     const showToastMessage = (msg: string) => {
         setToastMsg(msg);
         setShowToast(true);
     }
+
+    const fetchData = (action: FetchAction) => {
+        get<Thread>(`threads/${id}`)
+            .then(data => {
+                switch (action) {
+                    case FetchAction.get:
+                        setThread(data);
+                        showToastMessage('Data loaded from database.');
+                        break;
+
+                    case FetchAction.update: {
+                        if (JSON.stringify(data) === JSON.stringify(thread)) {
+                            showToastMessage('There are no new posts.');
+                            break;
+                        }
+
+                        showToastMessage(`New posts: ${data.postsCount - thread!.postsCount}.`);
+                        setThread(data);
+                        break;
+                    }
+
+                    case FetchAction.submit: {
+                        setThread(data);
+                        showToastMessage('Your message has been submitted.');
+                        break;
+                    }
+                }
+            })
+            .catch(() => {
+                if (action === FetchAction.update) {
+                    showToastMessage('Thread does not exists.');
+                    return;
+                }
+
+                setError(true);
+            })
+    }
+
+    useEffect(() => {
+        fetchData(FetchAction.get);
+    }, [id, abbr]);
 
     return thread ? (
         <>
@@ -58,7 +90,7 @@ export const ThreadPage: React.FC<Props> = ({ routeProps, links }) => {
 
             <Collapse in={show}>
                 <div id="form">
-                    <PostForm abbr={abbr} inThread={true} onSubmit={showToastMessage} />
+                    <PostForm abbr={abbr} inThread={true} onSubmit={showToastMessage} onUpdate={fetchData} />
 
                     <hr />
                 </div>
@@ -66,7 +98,7 @@ export const ThreadPage: React.FC<Props> = ({ routeProps, links }) => {
 
             {!show && <hr />}
 
-            <ThreadItem info={thread} className="mb-5" inThread={true} />
+            <ThreadItem onUpdate={fetchData} info={thread} className="mb-5" inThread={true} />
         </>
     ) : error ? <Redirect to="/not-found" /> : <div />;
 };

@@ -46,3 +46,9 @@ body {
         clear: both !important;
     }
 }
+
+.link {
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+}

@@ -2,16 +2,17 @@ import React, { useState, useRef, FormEvent, ChangeEvent } from 'react';
 import { Form, FormGroup, Row, Col, Button } from 'react-bootstrap';
 
 import { MarkupPanel } from './components';
-import { Thread } from '../../utils/common';
+import { Thread, FetchAction } from '../../utils/common';
 import { post } from '../../utils/api';
 
 type Props = Readonly<{
     abbr: string;
     inThread: boolean;
     onSubmit: (msg: string) => void;
+    onUpdate: (action: FetchAction) => void;
 }>;
 
-export const PostForm: React.FC<Props> = ({ abbr, inThread, onSubmit }) => {
+export const PostForm: React.FC<Props> = ({ abbr, inThread, onSubmit, onUpdate }) => {
     const [name, setName] = useState('');
     const [subject, setSubject] = useState('');
     const [comment, setComment] = useState('');
@@ -55,8 +56,7 @@ export const PostForm: React.FC<Props> = ({ abbr, inThread, onSubmit }) => {
             // Attempt to create new post
             post('posts/new', formData)
                 .then(() => {
-                    onSubmit('Your message has been submitted.');
-                    window.location.reload();
+                    onUpdate(FetchAction.submit);
                 })
                 .catch((err) => {
                     console.error(err);

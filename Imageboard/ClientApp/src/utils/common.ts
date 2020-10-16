@@ -25,3 +25,9 @@ export type Post = Readonly<{
 
 export type Boards = Readonly<Board[]>;
 export type Threads = Readonly<Thread[]>;
+
+export enum FetchAction {
+    get,
+    update,
+    submit,
+}
