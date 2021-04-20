@@ -1,7 +1,9 @@
+import 'primereact/resources/themes/mdc-dark-indigo/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
 import 'nprogress/nprogress.css';
+import '@styles/globals.css';
 
 import { AppProps } from 'next/app';
 import Router from 'next/router';

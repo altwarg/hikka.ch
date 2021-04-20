@@ -1,0 +1,14 @@
+html {
+  font-size: 14px;
+}
+
+body {
+  margin: 0px;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: var(--surface-a);
+  font-family: var(--font-family);
+  font-weight: normal;
+  color: car(--text-color);
+}

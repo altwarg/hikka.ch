@@ -48,7 +48,7 @@ namespace Imageboard.Services {
                     if (x.Posts.Last().Sage || y.Posts.Last().Sage) {
                         return 1;
                     } else {
-                        return -1 * DateTime.Compare(x.Posts.Last().DateTime, y.Posts.Last().DateTime);
+                        return -1 * DateTime.Compare(x.Posts.Last().Created, y.Posts.Last().Created);
                     }
                 });
 
@@ -76,7 +76,7 @@ namespace Imageboard.Services {
                 Id = id.ToString(),
                 No = 1,
                 Name = !string.IsNullOrEmpty(data.Name) ? data.Name : null,
-                DateTime = DateTime.Now,
+                Created = DateTime.Now,
                 Message = data.Message,
                 Attachment = attachmentId
             };
@@ -108,7 +108,7 @@ namespace Imageboard.Services {
                 Id = id.ToString(),
                 No = no,
                 Name = null,
-                DateTime = DateTime.Now,
+                Created = DateTime.Now,
                 Message = data.Message,
                 Attachment = attachmentId,
                 Sage = data.Sage == "sage"
